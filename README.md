@@ -16,3 +16,5 @@ AtAdmin is a [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) based [Zend Fram
  2. Add `AtAdmin` to your `config/application.config.php` file under the `modules` key after `ZfcAdmin`.
 
 ## Configuration
+
+See [AtCms](https://github.com/atukai/AtCms) as example.
