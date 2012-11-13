@@ -14,7 +14,7 @@
     ],
     "require": {
         "zendframework/zendframework": "2.*",
-        "zfc-admin": "dev-master",
+        "zf-commons/zfc-admin": "dev-master",
         "atukai/at-base": "dev-master"
     },
     "autoload": {
