@@ -1,25 +1,22 @@
 <?php
 
-/**
- * @category   ATF
- * @package    ATF_DataGrid
- * @subpackage ATF_DataGrid_Filter
- */
-class ATF_DataGrid_Filter_Equal extends ATF_DataGrid_Filter_Abstract 
+namespace AtAdmin\DataGrid\Filter;
+
+class Equal extends AbstractFilter
 {
     /**
-     * Returns the result of applying $value
-     *
-     * @param  mixed $value
-     * @return mixed
+     * @param \Zend\Db\Sql\Select $select
+     * @param $column
+     * @param mixed $value
+     * @return mixed|void
      */
     public function apply($select, $column, $value)
     {
         $value = $this->_applyValueType($value);
 
         if (strlen($value) > 0) {
-        	$columnName = $this->_findTableColumnName($select, $column->getName());
-            $select->where($columnName . ' = ?', $value);
+        	//$columnName = $this->_findTableColumnName($select, $column->getName());
+            $select->where($column->getName(), $value);
         }
     }
 }

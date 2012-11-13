@@ -13,5 +13,5 @@ interface FilterInterface
      * @param  mixed $value
      * @return mixed
      */
-    public function apply(\Zend\Db\Sql\Select $select, $column, $value);
+    public function apply($select, $column, $value);
 }

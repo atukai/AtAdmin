@@ -7,42 +7,38 @@ use AtAdmin\DataGrid\Column\Decorator;
 class Column
 {
     /**
-     * Column name
-     *
-     * @var string
-     */
-    protected $name = '';
-    
-    /**
-     * Column label
-     *
-     * @var string
-     */
-    protected $label = '';
+     * @var
+     */
+    protected $name;
 
     /**
-     * Is column visible in grid
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * Visibility in grid
      *
      * @var boolean
      */
     protected $visible = true;
 
     /**
-     * Is column visible in add/edit form?
+     * Visibility in add/edit form
      *
      * @var boolean
      */
     protected $visibleInForm = true;
 
     /**
-     * Is allow column sorting?
+     * Is column sortable?
      */
     protected $sortable = false;
     
     /**
      * Current order direction
      */
-    protected $orderDirection = 'DESC';
+    protected $orderDirection = 'desc';
     
     /**  
  	 * The form element  
@@ -65,11 +61,11 @@ class Column
      */
     protected $filters = array();
 
-    /**  
-     * The filters form elements  
-     *  
-     * @var Zend_Form_Element  
-     */  
+    /**
+     * The filters form elements
+     *
+     * @var array
+     */
     protected $filterFormElements = array();
     
     /**
@@ -78,17 +74,16 @@ class Column
      * @var array
      */
     protected $decorators = array();
-    
+
     /**
-     * Constructor
+     * @param $name
      */
     public function __construct($name)
     {
         $this->setName($name);
 
         if (null === $this->getName()) {
-            throw new \Exception('ATF_DataGrid_Column requires each column to
-                have a name');
+            throw new \Exception('Please specify a column name');
         };
         
         // Extensions...
@@ -184,7 +179,7 @@ class Column
      */
     public function setSortable($value = true)
     {
-        $this->sortable = $value;
+        $this->sortable = (bool) $value;
         return $this;
     }
 
@@ -225,9 +220,7 @@ class Column
      */  
     public function revertOrderDirection()
     {
-        strtolower($this->getOrderDirection()) == 'asc'
-                                               ? $this->orderDirection = 'desc'
-                                               : $this->orderDirection = 'asc';
+        $this->getOrderDirection() == 'asc' ? $this->orderDirection = 'desc' : $this->orderDirection = 'asc';
         return $this;
     }
 
@@ -318,7 +311,6 @@ class Column
         foreach ($this->decorators as $decorator) {
             $value = $decorator->render($value, $row);    
         }
-        
         return $value;
     }
     
@@ -350,7 +342,7 @@ class Column
     public function addValidator($validator)
     {
     	if (null == $this->formElement) {
-    		throw new ATF_Exception('Form element for column "' . $this->getName() . '" is not
+    		throw new \Exception('Form element for column "' . $this->getName() . '" is not
     		    specified. Before set validators you must set form element.');
     	}
     	
@@ -359,6 +351,7 @@ class Column
     	}
     	
     	$this->formElement->addValidator($validator);
+
         return $this;
     }
 
@@ -390,7 +383,7 @@ class Column
     	foreach ($filters as $filter) {
     	    $this->addFilter($filter);	
     	}
-        
+
         return $this;
     }
 
@@ -425,37 +418,27 @@ class Column
     {
         $filterName = $filter->getName();
 
-        if (!isset($this->_filterFormElements[$filterName])) {
+        if (!isset($this->filterFormElements[$filterName])) {
             $formElement = $this->getFormElement();
 	        $filterFormElement = clone $formElement;
-	        $filterFormElement//->setRequired(false)
-	                          ->setLabel($filter->getLabel())
-	                          ->setName($filterName)
-                              //->clearDecorators()
-                              //->addDecorator('ViewHelper');
-                              ;
-
+	        $filterFormElement->setName($filterName);
             $this->filterFormElements[$filterName] = $filterFormElement;
         }
         
         return $this->filterFormElements[$filterName];
     }
-    
+
     /**
      * @param $element
-     * @param $filterName
-     * @return ATF_DataGrid_Column
+     * @param null $filterName
+     * @return Column
      */
-    public function setFilterFormElement($element, $filterName)
+    public function setFilterFormElement($formElement, $filterName = null)
     {
-        $element->setRequired(false)
-                ->removeDecorator('Description')
-                ->removeDecorator('Label');
-        
         if (!$filterName) {
-            throw new ATF_DataGrid_Exception('Please specify filter name');
+            $filterName = $formElement->getName();
         }
-        $this->filterFormElements[$filterName] = $element;
+        $this->filterFormElements[$filterName] = $formElement;
 
         return $this;            
     }    
