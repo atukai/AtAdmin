@@ -1,0 +1,28 @@
+{
+    "name": "atukai/at-admin",
+    "description": "A ZfcAdmin based ZF2 module which provides a admin panel functionality. Helps to generate grids and forms",
+    "type": "library",
+    "keywords": [
+        "admin", "administration", "manage", "grid", "AtAdmin", "atukai", "at", "zf2"
+    ],
+    "homepage": "https://github.com/atukai/AtAdmin",
+    "authors": [
+        {
+            "name": "Alexander Tukai",
+            "email": "atukai@gmail.com"
+        }
+    ],
+    "require": {
+        "zendframework/zendframework": "2.*",
+        "zfc-admin": "dev-master",
+        "atukai/at-base": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "AtAdmin": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
