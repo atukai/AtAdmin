@@ -69,15 +69,12 @@ class DataGridController extends AbstractActionController
         if ($form->isValid()) {
             $formData = $this->preSave($form);
 
-            echo '<pre>';var_dump($formData);exit;
-
             $itemId = $grid->save($formData);
 
             $this->postSave($grid, $itemId);
 
             //$this->_helper->flashMessenger->addMessage('Запись успешно добавлена');
             //$this->_helper->backToUrl();
-            //$this->redirect('');
         }
 
         $viewModel = new ViewModel(array('grid' => $grid));
@@ -164,11 +161,12 @@ class DataGridController extends AbstractActionController
 
     /**
      * Hook after save row
+     * @todo Use event here
      *
-     * @param ATF_DataGrid $grid
-     * @return mixed
+     * @param $grid
+     * @param $primary
      */
-    public function postSave(ATF_DataGrid $grid, $primary)
+    public function postSave($grid, $primary)
     {
         return;
     }

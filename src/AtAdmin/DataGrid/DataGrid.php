@@ -25,6 +25,11 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     protected $columns = array();
 
     /**
+     * @var string
+     */
+    protected $identifierColumn = 'id';
+
+    /**
      * @var null
      */
     protected $currentOrderColumnName = null;
@@ -186,6 +191,22 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     // COLUMNS
+
+    /**
+     * @param $name
+     */
+    public function setIdentifierColumn($name)
+    {
+        $this->identifierColumn = (string) $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifierColumn()
+    {
+        return $this->identifierColumn;
+    }
 
     /**
      * Check if is column present in column list
@@ -427,7 +448,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     public function setDataSource(DataSource\AbstractDataSource $dataSource)
     {
         $this->dataSource = $dataSource;
-        $this->columns = $this->getDataSource()->loadColumns();
+        $this->columns = $this->getDataSource()->getLoadedColumns();
         
     	return $this;	
     }
@@ -682,7 +703,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function update($data, $primary)
     {
-        $this->getDataSource()->update($data, $primary);
+        return $this->getDataSource()->update($data, $primary);
     }
 
     /**
@@ -692,10 +713,12 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     public function save($data, $identifier = null)
     {
         if ($identifier) {
-            $this->update($data, $identifier);
+            $id = $this->update($data, $identifier);
         } else {
-            $this->insert($data);
+            $id = $this->insert($data);
         }
+
+        return $id;
     }
 
     /**
@@ -716,10 +739,6 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
         if ($this->form == null) {
             //$form = new ATF_DataGrid_Form();
             $form = new \Zend\Form\Form('create-form', $options);
-
-/*            if ($this->getRenderer()->getView() instanceof \Zend\View\Renderer\PhpRenderer) {
-                $form->setView($this->getRenderer()->getView());
-            }*/
 
             // Collect elements
             foreach ($this->getColumns() as $column) {

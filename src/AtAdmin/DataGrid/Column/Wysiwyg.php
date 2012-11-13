@@ -3,11 +3,6 @@
 class ATF_DataGrid_Column_Wysiwyg extends ATF_DataGrid_Column
 {
     /**
-     * @var string
-     */
-    protected $_type = self::TYPE_WYSIWYG;
-
-    /**
      * @return void
      */
     public function init()

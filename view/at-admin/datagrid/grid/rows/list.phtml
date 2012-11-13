@@ -2,7 +2,7 @@
     <?php foreach ($this->rows as $row) : ?>
         <tr>
             <td>
-                <input class="grid-table-checker" type="checkbox" value="<?= $row['id'] ?>" id="item_id_<?= $row['id'] ?>" name="items[]"/>
+                <input class="grid-table-checker" type="checkbox" value="<?= $row[$this->grid->getIdentifierColumn()] ?>" id="item_id_<?= $row[$this->grid->getIdentifierColumn()] ?>" name="items[]"/>
             </td>
 
             <?php foreach ($row as $name => $value) : ?>

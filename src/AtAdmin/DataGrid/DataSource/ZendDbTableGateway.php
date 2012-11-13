@@ -27,12 +27,22 @@ class ZendDbTableGateway extends AbstractDataSource
     /**
      * @var array
      */
+    protected $tableColumns = array();
+
+    /**
+     * @var array
+     */
     protected $joinedTables = array();
 
     /**
      * @var array
      */
     protected $joinedColumns = array();
+
+    /**
+     * @var array
+     */
+    protected $loadedColumns = array();
 
     /**
      * @param $options
@@ -44,6 +54,7 @@ class ZendDbTableGateway extends AbstractDataSource
         //$this->tableGateway = new TableGateway($options['table'], $this->getDbAdapter(), new Feature\MetadataFeature());
         $this->tableGateway = new TableGateway($options['table'], $this->getDbAdapter());
         $this->select = $this->tableGateway->getSql()->select();
+        $this->loadedColumns = $this->loadColumns();
 	}
 
     /**
@@ -73,7 +84,7 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
-     * @return Zend_Db_Select
+     * @return null|\Zend\Db\Sql\Select
      */
     public function getSelect()
     {
@@ -131,12 +142,12 @@ class ZendDbTableGateway extends AbstractDataSource
         $baseTableColumns = $tableMetadata->getColumns($this->getTableGateway()->getTable());
         //$baseTableColumns = $this->getTableGateway()->getColumns();
 
-        //echo "<pre>";var_dump($baseTableColumns);exit;
-
         // Setup default settings for base table column fields
         foreach ($baseTableColumns as $columnObject) {
             $columnName = $columnObject->getName();
         	$columnDataType = $columnObject->getDataType();
+
+            $this->tableColumns[] = $columnName;
 
         	switch (true) {
         		case in_array($columnDataType, array('datetime', 'timestamp', 'time')):
@@ -147,7 +158,11 @@ class ZendDbTableGateway extends AbstractDataSource
                     $column = new Column\Date($columnName);
                     break;
 
-        		default:
+                case in_array($columnDataType, array('mediumtext', 'text')):
+                    $column = new Column\Textarea($columnName);
+                    break;
+
+                default:
         			$column = new Column\Literal($columnName);
       		        break;
         	}
@@ -169,6 +184,14 @@ class ZendDbTableGateway extends AbstractDataSource
 
         return $columns;
     }
+
+    /**
+     * @return array
+     */
+    public function getLoadedColumns()
+    {
+        return $this->loadedColumns;
+    }
     
     /**
      * @param $columns
@@ -184,7 +207,7 @@ class ZendDbTableGateway extends AbstractDataSource
         $select = $this->getTableGateway()->getAdapter()->select();
         $select->from('information_schema.COLUMNS', array('name' => 'COLUMN_NAME', 'comment' => 'COLUMN_COMMENT'));
         $select->where('TABLE_SCHEMA = ?', $schema);
-        $select->where('TABLE_NAME = ?', $this->getTableGateway()->info(Zend_Db_Table_Abstract::NAME));
+        $select->where('TABLE_NAME = ?', $this->getTableGateway()->getTable());
         
         $columnsInfo = $select->query()->fetchAll();
         $select->reset(); // ???
@@ -242,13 +265,31 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
+     * @param array $data
+     * @return array
+     */
+    protected function cleanDataForSql($data = array())
+    {
+        $cleanData = array();
+        foreach ($data as $key => $value) {
+            if (in_array($key, $this->tableColumns)) {
+                $cleanData[$key] = $value;
+            }
+        }
+
+        //var_dump($this->tableColumns,$cleanData);exit;
+
+        return $cleanData;
+    }
+
+    /**
      * @param $data
      * @return mixed
      */
     public function insert($data)
     {
     	$table = $this->getTableGateway();
-        $table->insert($data);
+        $table->insert($this->cleanDataForSql($data));
 
         return $table->getLastInsertValue();
     }
@@ -273,6 +314,8 @@ class ZendDbTableGateway extends AbstractDataSource
             $row->setFromArray($data);
             $row->save();
         }
+
+        return $key;
     }
 
     /**

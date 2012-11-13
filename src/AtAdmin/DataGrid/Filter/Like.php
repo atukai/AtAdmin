@@ -2,8 +2,6 @@
 
 namespace AtAdmin\DataGrid\Filter;
 
-use Zend\Db\Sql\Predicate;
-
 class Like extends AbstractFilter
 {
     /**
@@ -21,11 +19,12 @@ class Like extends AbstractFilter
             //$columnName = $this->findTableColumnName($select, $column->getName());
             $columnName = $column->getName();
             
-            /*var_dump($column->getName());
-            die;
-*/
-            // @todo Вынести формирование шаблона LIKE в метод
-            $select = $select->where(new Predicate\Like($columnName, '%' . $value . '%'));
+            // @todo Add param for like template
+            $spec = function (\Zend\Db\Sql\Where $where) use ($columnName,$value) {
+                $where->like($columnName, '%' . $value . '%');
+            };
+
+            $select->where($spec);
 
             //var_dump($select->getSqlString());exit;
         }
