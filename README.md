@@ -19,3 +19,10 @@ which provides a admin panel functionality. It ships with components to generate
 ## Configuration
 
 See [AtCms](https://github.com/atukai/AtCms) as example.
+
+### Layout
+AtAdmin ships with built in layout which override default ZfcAdmin layout.
+To override the built in admin layout with your custom layout follow to the next steps
+
+1. In your module under the `view` directory create the folder `layout`
+2. Create the override script `admin.phtml`
