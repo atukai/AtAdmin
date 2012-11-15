@@ -19,4 +19,12 @@ class Module
             ),
         );
     }
+
+    /**
+     * @param $moduleManager
+     */
+    public function init($moduleManager)
+    {
+        $moduleManager->loadModule('ZfcAdmin');
+    }
 }

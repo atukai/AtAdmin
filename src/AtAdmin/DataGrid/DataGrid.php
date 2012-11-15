@@ -448,7 +448,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     public function setDataSource(DataSource\AbstractDataSource $dataSource)
     {
         $this->dataSource = $dataSource;
-        $this->columns = $this->getDataSource()->getLoadedColumns();
+        $this->columns = $this->getDataSource()->getColumns();
         
     	return $this;	
     }

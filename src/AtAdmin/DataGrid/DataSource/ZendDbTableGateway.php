@@ -25,24 +25,25 @@ class ZendDbTableGateway extends AbstractDataSource
     protected $select = null;
 
     /**
+     * Base table columns
+     *
      * @var array
      */
     protected $tableColumns = array();
 
     /**
+     * Joined tables
+     *
      * @var array
      */
     protected $joinedTables = array();
 
     /**
+     * Joined table columns
+     *
      * @var array
      */
     protected $joinedColumns = array();
-
-    /**
-     * @var array
-     */
-    protected $loadedColumns = array();
 
     /**
      * @param $options
@@ -54,7 +55,7 @@ class ZendDbTableGateway extends AbstractDataSource
         //$this->tableGateway = new TableGateway($options['table'], $this->getDbAdapter(), new Feature\MetadataFeature());
         $this->tableGateway = new TableGateway($options['table'], $this->getDbAdapter());
         $this->select = $this->tableGateway->getSql()->select();
-        $this->loadedColumns = $this->loadColumns();
+        $this->columns = $this->loadColumns();
 	}
 
     /**
@@ -129,8 +130,6 @@ class ZendDbTableGateway extends AbstractDataSource
             array($alias => $joinTableName),
             $this->getTable()->getName(). '.' . $keyName . '='. $alias . '.' . $foreignKeyName,
             $joinedColumns);
-
-        //echo '<pre>';var_dump($this->getSelect()->__toString());exit;
     }
 
     /**
@@ -185,14 +184,6 @@ class ZendDbTableGateway extends AbstractDataSource
         return $columns;
     }
 
-    /**
-     * @return array
-     */
-    public function getLoadedColumns()
-    {
-        return $this->loadedColumns;
-    }
-    
     /**
      * @param $columns
      * @return void
@@ -250,10 +241,12 @@ class ZendDbTableGateway extends AbstractDataSource
                 $select->order($order);
             }
 
-	        $this->paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\DbSelect($select, $this->getDbAdapter()));
-	        $this->paginator->setCurrentPageNumber($currentPage);
-	        $this->paginator->setItemCountPerPage($itemsPerPage);
-	        $this->paginator->setPageRange($pageRange);
+	        $this->paginator = new \Zend\Paginator\Paginator(
+                new \Zend\Paginator\Adapter\DbSelect($select, $this->getDbAdapter())
+            );
+	        $this->paginator->setCurrentPageNumber($currentPage)
+                            ->setItemCountPerPage($itemsPerPage)
+                            ->setPageRange($pageRange);
 
 	        return $this->paginator->getItemsByPage($currentPage);
 	    		
@@ -265,6 +258,8 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
+     * Return only columns which present in table
+     *
      * @param array $data
      * @return array
      */
@@ -276,8 +271,6 @@ class ZendDbTableGateway extends AbstractDataSource
                 $cleanData[$key] = $value;
             }
         }
-
-        //var_dump($this->tableColumns,$cleanData);exit;
 
         return $cleanData;
     }

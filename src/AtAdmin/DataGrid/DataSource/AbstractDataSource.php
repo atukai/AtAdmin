@@ -11,7 +11,14 @@ abstract class AbstractDataSource
     const LIST_TYPE_TREE  = 'tree';
 
     /**
-     * @var null|Zend_Paginator
+     * All columns
+     *
+     * @var array
+     */
+    protected $columns = array();
+
+    /**
+     * @var null|\Zend\Paginator\Paginator
      */
     protected $paginator = null;
 
@@ -34,7 +41,7 @@ abstract class AbstractDataSource
 
     /**
      * @param array $options
-     * @return ATF_DataGrid_DataSource_Abstract
+     * @return AbstractDataSource
      */
     public function setOptions(array $options)
     {
@@ -45,7 +52,6 @@ abstract class AbstractDataSource
             $method = 'set' . ucfirst($key);
 
             if (method_exists($this, $method)) {
-                // Setter exists; use it
                 $this->$method($value);
             }
         }
@@ -54,11 +60,19 @@ abstract class AbstractDataSource
     }
 
     /**
-     * @return null|Zend_Paginator
+     * @return null|\Zend\Paginator\Paginator
      */
     public function getPaginator()
     {
         return $this->paginator;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumns()
+    {
+        return $this->columns;
     }
 
     /**
