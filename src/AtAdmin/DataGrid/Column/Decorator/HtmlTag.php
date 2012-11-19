@@ -1,11 +1,13 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_Tag extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class HtmlTag extends AbstractDecorator
 {
     /**
-     * @var
+     * @var string
      */
-    protected $tag;
+    protected $tag = 'span';
 
     /**
      * @var string
@@ -22,13 +24,21 @@ class ATF_DataGrid_Column_Decorator_Tag extends ATF_DataGrid_Column_Decorator_Ab
 
     /**
      * @param $tag
-     * @return ATF_DataGrid_Column_Decorator_Tag
+     * @return HtmlTag
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
         return $this;
-    }    
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
 
     /**
      * Render value wrapping into tag
@@ -39,7 +49,9 @@ class ATF_DataGrid_Column_Decorator_Tag extends ATF_DataGrid_Column_Decorator_Ab
      */
     public function render($value, $row)
     {
-        $content = '<' . $this->tag . '>' . $value . '</' . $this->tag . '>';
+        $tag = $this->getTag();
+        $content = '<' . $tag . '>' . $value . '</' . $tag . '>';
+
         return $content;
     }
 }

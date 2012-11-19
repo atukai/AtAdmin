@@ -32,8 +32,8 @@ abstract class AbstractDecorator implements DecoratorInterface
     }
 
     /**
-     * @param  $placement
-     * @return ATF_DataGrid_Column_Decorator_Abstract
+     * @param $placement
+     * @return AbstractDecorator
      */
     public function setPlacement($placement)
     {
@@ -50,8 +50,8 @@ abstract class AbstractDecorator implements DecoratorInterface
     }
 
     /**
-     * @param  $separator
-     * @return ATF_DataGrid_Column_Decorator_Abstract
+     * @param $separator
+     * @return AbstractDecorator
      */
     public function setSeparator($separator)
     {

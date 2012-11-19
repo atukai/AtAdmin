@@ -1,10 +1,12 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_Ip extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class Long2Ip extends AbstractDecorator
 {
     /**
-     * @param  $value
-     * @param  $row
+     * @param $value
+     * @param $row
      * @return string
      */
     public function render($value, $row)

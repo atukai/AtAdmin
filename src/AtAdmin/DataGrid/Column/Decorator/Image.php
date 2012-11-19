@@ -1,6 +1,8 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_Image extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class Image extends AbstractDecorator
 {
     /**
      * Image path template (local or url)

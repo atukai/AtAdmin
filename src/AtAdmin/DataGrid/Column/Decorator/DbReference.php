@@ -1,9 +1,11 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_DbReference extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class DbReference extends AbstractDecorator
 {
     /**
-     * @var null
+     * @var null|\Zend\Db\TableGateway\TableGateway
      */
     protected $table = null;
 
@@ -18,11 +20,11 @@ class ATF_DataGrid_Column_Decorator_DbReference extends ATF_DataGrid_Column_Deco
     protected $resultFieldName = '';
 
     /**
-     * @param ATF_Db_Table_Abstract $table
+     * @param \Zend\Db\TableGateway\TableGateway $table
      * @param $referenceField
      * @param $resultFieldName
      */
-    public function __construct(ATF_Db_Table_Abstract $table, $referenceField, $resultFieldName)
+    public function __construct(\Zend\Db\TableGateway\TableGateway $table, $referenceField, $resultFieldName)
     {
         $this->table           = $table;
         $this->referenceField  = $referenceField;

@@ -1,6 +1,8 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_HyperLink extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class HyperLink extends AbstractDecorator
 {
     /**
      * @var string
@@ -20,7 +22,7 @@ class ATF_DataGrid_Column_Decorator_HyperLink extends ATF_DataGrid_Column_Decora
         $params = array();
         
         foreach ($this->params as $key => $param) {
-                $params[$key] = $param instanceof ATF_DataGrid_Column
+                $params[$key] = $param instanceof \AtAdmin\DataGrid\Column
                               ? $row[$param->getName()]
                               : $params[$key] = $param;
         }

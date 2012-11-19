@@ -1,11 +1,13 @@
 <?php
 
-class ATF_DataGrid_Column_Decorator_BitMask extends ATF_DataGrid_Column_Decorator_Abstract
+namespace AtAdmin\DataGrid\Column\Decorator;
+
+class BitMask extends AbstractDecorator
 {
     /**
      * @var array
      */
-    protected $_statuses = array();
+    protected $statuses = array();
 
     /**
      * @param array $statuses
@@ -22,7 +24,7 @@ class ATF_DataGrid_Column_Decorator_BitMask extends ATF_DataGrid_Column_Decorato
      */
     public function setStatuses($statuses = array())
     {
-        $this->_statuses = $statuses;
+        $this->statuses = $statuses;
     }
     
     /**
@@ -33,11 +35,11 @@ class ATF_DataGrid_Column_Decorator_BitMask extends ATF_DataGrid_Column_Decorato
     public function render($value, $row)
     {
         $str = '';
-        foreach ($this->_statuses as $name => $status) {
-            if ($this->_checkStatus($status, $value)) {
-                $str .= '<div>' . $name . ': <b>да</b></div>';
+        foreach ($this->statuses as $name => $status) {
+            if ($this->checkStatus($status, $value)) {
+                $str .= '<div>' . $name . ': <b>Yes</b></div>';
             } else {
-                $str .= '<div>' . $name . ': нет</div>';
+                $str .= '<div>' . $name . ': No</div>';
             }    
         }
         
@@ -49,7 +51,7 @@ class ATF_DataGrid_Column_Decorator_BitMask extends ATF_DataGrid_Column_Decorato
      * @param $value
      * @return int
      */
-    protected function _checkStatus($status, $value)
+    protected function checkStatus($status, $value)
     {
         return $value & $status;
     }    

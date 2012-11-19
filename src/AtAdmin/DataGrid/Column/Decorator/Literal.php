@@ -16,12 +16,12 @@ class Literal extends AbstractDecorator
      * @var string
      */
     protected $encoding = 'UTF-8';
-    
+
     /**
      * Sets the _escape() callback.
      *
      * @param mixed $spec The callback for _escape() to use.
-     * @return ATF_DataGrid_Column_Decorator_Literal
+     * @return Literal
      */
     public function setEscape($spec)
     {
@@ -51,7 +51,7 @@ class Literal extends AbstractDecorator
      * Set encoding to use with htmlentities() and htmlspecialchars()
      *
      * @param string $encoding
-     * @return ATF_DataGrid_Column_Decorator_Literal
+     * @return Literal
      */
     public function setEncoding($encoding)
     {
