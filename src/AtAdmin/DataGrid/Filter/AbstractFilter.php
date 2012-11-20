@@ -10,9 +10,9 @@ abstract class AbstractFilter implements FilterInterface
     /**
      * Value types
      */
-    const ATF_DATAGRID_FILTER_VALUE_TYPE_STRING = 'string';
-    const ATF_DATAGRID_FILTER_VALUE_TYPE_INTEGER = 'integer';
-    const ATF_DATAGRID_FILTER_VALUE_TYPE_DATETIME = 'datetime';
+    const FILTER_VALUE_TYPE_STRING = 'string';
+    const FILTER_VALUE_TYPE_INTEGER = 'integer';
+    const FILTER_VALUE_TYPE_DATETIME = 'datetime';
     
     /**
      * 
@@ -27,13 +27,13 @@ abstract class AbstractFilter implements FilterInterface
     /**
      * 
      */
-    protected $valueType = self::ATF_DATAGRID_FILTER_VALUE_TYPE_STRING;
+    protected $valueType;
     
     /**
      * 
      * @param $name
      */
-    public function __construct($name = '')
+    public function __construct($name = null, $valueType = self::FILTER_VALUE_TYPE_STRING)
     {
     	if (isset($name)) {
     		$this->setName($name);
@@ -98,20 +98,20 @@ abstract class AbstractFilter implements FilterInterface
     {
         $value = trim($value);
 
-        if (strlen($value) == 0) {
-            return; 
+        if (empty($value)) {
+            return $value;
         }
-        
+
         switch ($this->valueType) {
-            case self::ATF_DATAGRID_FILTER_VALUE_TYPE_INTEGER:
+            case self::FILTER_VALUE_TYPE_INTEGER:
                 $value = (integer) $value;
                 break;
 
-            case self::ATF_DATAGRID_FILTER_VALUE_TYPE_STRING:
+            case self::FILTER_VALUE_TYPE_STRING:
                 $value = (string) $value;
                 break;
                 
-            case self::ATF_DATAGRID_FILTER_VALUE_TYPE_DATETIME:
+            case self::FILTER_VALUE_TYPE_DATETIME:
                 $value = date('Y-m-d H:i:s', strtotime($value));
                 break;
                 

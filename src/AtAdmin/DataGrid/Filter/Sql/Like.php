@@ -1,8 +1,10 @@
 <?php
 
-namespace AtAdmin\DataGrid\Filter;
+namespace AtAdmin\DataGrid\Filter\Sql;
 
-class Like extends AbstractFilter
+use AtAdmin\DataGrid\Filter;
+
+class Like extends Filter\AbstractFilter
 {
     /**
      * Returns the result of applying $value
@@ -13,8 +15,8 @@ class Like extends AbstractFilter
     public function apply($select, $column, $value)
     {
         $value = $this->applyValueType($value);
-        
-        if (strlen($value) > 0) {
+
+        if (isset($value) && !empty($value)) {
             
             //$columnName = $this->findTableColumnName($select, $column->getName());
             $columnName = $column->getName();
@@ -25,8 +27,8 @@ class Like extends AbstractFilter
             };
 
             $select->where($spec);
-
-            //var_dump($select->getSqlString());exit;
         }
+
+        return $select;
     }
 }

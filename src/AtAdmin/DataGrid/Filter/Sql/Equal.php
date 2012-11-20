@@ -1,8 +1,10 @@
 <?php
 
-namespace AtAdmin\DataGrid\Filter;
+namespace AtAdmin\DataGrid\Filter\Sql;
 
-class Equal extends AbstractFilter
+use AtAdmin\DataGrid\Filter;
+
+class Equal extends Filter\AbstractFilter
 {
     /**
      * @param $select
@@ -14,9 +16,11 @@ class Equal extends AbstractFilter
     {
         $value = $this->applyValueType($value);
 
-        if (strlen($value) > 0) {
+        if (isset($value) && !empty($value)) {
         	//$columnName = $this->_findTableColumnName($select, $column->getName());
             $select->where(array($column->getName() => $value));
         }
+
+        return $select;
     }
 }
