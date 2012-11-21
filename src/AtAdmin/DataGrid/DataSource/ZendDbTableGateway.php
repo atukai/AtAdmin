@@ -2,27 +2,28 @@
 
 namespace AtAdmin\DataGrid\DataSource;
 
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\ResultSet\ResultSet;
 use AtAdmin\DataGrid\Column;
 
 class ZendDbTableGateway extends AbstractDataSource
 {
     /**
-     * @var null
+     * @var Adapter
      */
-    protected $dbAdapter = null;
+    protected $dbAdapter;
 
     /**
-     * @var null|\Zend\Db\TableGateway\TableGateway
+     * @var TableGateway
      */
-    protected $tableGateway = null;
+    protected $tableGateway;
 
     /**
      * @var \Zend\Db\Sql\Select
      */
-    protected $select = null;
+    protected $select;
 
     /**
      * Base table columns
@@ -59,17 +60,17 @@ class ZendDbTableGateway extends AbstractDataSource
 	}
 
     /**
-     * @param $adapter
+     * @param \Zend\Db\Adapter\Adapter $adapter
      * @return ZendDbTableGateway
      */
-    public function setDbAdapter($adapter)
+    public function setDbAdapter(Adapter $adapter)
     {
         $this->dbAdapter = $adapter;
         return $this;
     }
 
     /**
-     * @return null
+     * @return \Zend\Db\Adapter\Adapter
      */
     public function getDbAdapter()
     {
@@ -77,7 +78,17 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
-     * @return null|\Zend\Db\TableGateway\TableGateway
+     * @param \Zend\Db\TableGateway\TableGateway $table
+     * @return ZendDbTableGateway
+     */
+    public function setTableGateway(TableGateway $table)
+    {
+        $this->tableGateway = $table;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Db\TableGateway\TableGateway
      */
     public function getTableGateway()
     {
@@ -85,11 +96,24 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
-     * @return null|\Zend\Db\Sql\Select
+     * @return \Zend\Db\Sql\Select
      */
     public function getSelect()
     {
         return $this->select;
+    }
+
+    /**
+     * @return mixed|\Zend\Paginator\Paginator
+     */
+    public function getPaginator()
+    {
+        if (!$this->paginator) {
+            $this->paginator = new \Zend\Paginator\Paginator(
+                new \Zend\Paginator\Adapter\DbSelect($this->getSelect(), $this->getDbAdapter())
+            );
+        }
+        return $this->paginator;
     }
 
     /**
@@ -213,52 +237,46 @@ class ZendDbTableGateway extends AbstractDataSource
     }
 
     /**
-     * Return row by primary key
+     * Return row by identifier (primary key)
+     *
+     * @param $identifier
+     * @return array|\ArrayObject|mixed|null
      */
-    public function getRow($key)
+    public function find($identifier)
     {
-        if (is_array($key)) {
-            return $this->getTableGateway()->find($key);
-        }
-
-        return $this->getTableGateway()->find($key)->current();
+        return $this->getTableGateway()->select(array($this->getIdentifierFieldName() => $identifier))->current();
     }
-    
+
     /**
      * @param $listType
      * @param $order
      * @param $currentPage
      * @param $itemsPerPage
      * @param $pageRange
-     * @return array|Traversable
+     * @return mixed
      */
-    public function getRows($listType, $order, $currentPage, $itemsPerPage, $pageRange)
+    public function fetch($listType, $order, $currentPage, $itemsPerPage, $pageRange)
     {
     	if ($listType == AbstractDataSource::LIST_TYPE_PLAIN) {
-	        $select = $this->getSelect();
-
             if ($order) {
-                $select->order($order);
+                $this->getSelect()->order($order);
             }
 
-	        $this->paginator = new \Zend\Paginator\Paginator(
-                new \Zend\Paginator\Adapter\DbSelect($select, $this->getDbAdapter())
-            );
-	        $this->paginator->setCurrentPageNumber($currentPage)
-                            ->setItemCountPerPage($itemsPerPage)
-                            ->setPageRange($pageRange);
+	        $paginator = $this->getPaginator();
+	        $paginator->setCurrentPageNumber($currentPage)
+                      ->setItemCountPerPage($itemsPerPage)
+                      ->setPageRange($pageRange);
 
-	        return $this->paginator->getItemsByPage($currentPage);
-	    		
+	        return $paginator->getItemsByPage($currentPage);
     	} elseif ($listType == AbstractDataSource::LIST_TYPE_TREE) {
-    	    $items = $this->getTableGateway()->fetchAll();
             // @todo: implement forming data for tree
-            return $items;
+    	    /*$items = $this->getTableGateway()->fetchAll();
+            return $items;*/
     	}
     }
 
     /**
-     * Return only columns which present in table
+     * Get only fields which present in table
      *
      * @param array $data
      * @return array
@@ -277,7 +295,7 @@ class ZendDbTableGateway extends AbstractDataSource
 
     /**
      * @param $data
-     * @return mixed
+     * @return int|mixed
      */
     public function insert($data)
     {
@@ -290,33 +308,22 @@ class ZendDbTableGateway extends AbstractDataSource
     /**
      * @param $data
      * @param $key
-     * @return mixed|void
+     * @return mixed
      */
-    public function update($data, $key)
+    public function update($data, $identifier)
     {
-    	$rowset = $this->getRow($key);
+    	$result = $this->find($identifier);
+        $result->setFromArray($this->cleanDataForSql($data));
 
-        if ($rowset instanceof Zend_Db_Table_Rowset) {
-            foreach($rowset as $row) {
-                $row->setFromArray($data);
-                $row->save();
-            }
-
-        } else {
-            $row = $rowset;
-            $row->setFromArray($data);
-            $row->save();
-        }
-
-        return $key;
+        return $result->save();
     }
 
     /**
-     * @param $key
+     * @param $identifier
      * @return mixed|void
      */
-    public function delete($key)
+    public function delete($identifier)
     {
-        $this->getTableGateway()->find($key)->current()->delete();
+        $this->getTableGateway()->delete($identifier);
     }    
 }

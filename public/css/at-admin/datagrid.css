@@ -3,6 +3,7 @@
 .atf-grid table label {font-size: 1em; width: 50px;}
 .atf-grid table .checkbox {padding: 0; width: 36px; text-align: center;}
 .atf-grid table th, .atf-grid table td {padding: 3px 6px; font-size: 12px; vertical-align: middle; }
+.atf-grid table th input[type="checkbox"], .atf-grid table td input[type="checkbox"] {margin-top: -2px;}
 
 .atf-grid table th a {color: #2D444F; text-decoration: none;}
 .atf-grid table th a:hover {text-decoration: underline;}

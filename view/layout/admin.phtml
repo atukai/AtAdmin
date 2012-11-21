@@ -29,11 +29,25 @@
                     </a>
                     <a class="brand" href="<?= $this->url('zfcadmin') ?>">AtAdmin</a>
                     <div class="nav-collapse">
-                        <?= $this->navigation('admin_navigation')
-                                 ->menu()
-                                 ->setUlClass('nav')
-                                 ->setMaxDepth(0)
-                                 ->setRenderInvisible(false)?>
+                        <ul class="nav">
+                            <?php foreach ($this->navigation('admin_navigation')->getContainer() as $item): ?>
+                                <?php if ($item->hasPages()): ?>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <?= $this->translate($item->getLabel()) ?>
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <?php foreach ($item as $page): ?>
+                                            <li><a href="<?= $page->getHref() ?>"><?= $this->translate($page->getLabel()) ?></a></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else: ?>
+                                    <li><a href="<?= $item->getHref() ?>"><?= $this->translate($item->getLabel()) ?></a></li>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>

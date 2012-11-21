@@ -27,7 +27,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * @var string
      */
-    protected $identifierColumn = 'id';
+    protected $identifierColumnName = 'id';
 
     /**
      * @var null
@@ -195,17 +195,20 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * @param $name
      */
-    public function setIdentifierColumn($name)
+    public function setIdentifierColumnName($name)
     {
-        $this->identifierColumn = (string) $name;
+        $this->identifierColumnName = (string) $name;
+        $this->getDataSource()->setIdentifierFieldName($this->identifierColumnName);
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getIdentifierColumn()
+    public function getIdentifierColumnName()
     {
-        return $this->identifierColumn;
+        return $this->identifierColumnName;
     }
 
     /**
@@ -471,7 +474,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function getRow($key)
     {
-        return $this->getDataSource()->getRow($key);
+        return $this->getDataSource()->find($key);
     }
     
     /**
@@ -487,7 +490,7 @@ class DataGrid implements \Countable, \IteratorAggregate, \ArrayAccess
             $order = $this->getCurrentOrderColumnName() . ' ' . $this->getCurrentOrderDirection();
         }
 
-    	$this->rows = $this->getDataSource()->getRows(
+    	$this->rows = $this->getDataSource()->fetch(
             $listType,
             $order,
             $this->currentPage,

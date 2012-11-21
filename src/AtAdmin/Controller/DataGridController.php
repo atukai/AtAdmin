@@ -88,43 +88,49 @@ class DataGridController extends AbstractActionController
      */
     public function editAction()
     {
-        $this->view->backUrl = $this->_helper->backToUrl->getBackUrl(false);
+        //$this->view->backUrl = $this->_helper->backToUrl->getBackUrl(false);
 
-        /** @var ATF_DataGrid $grid */
-        $grid = $this->_getGrid();
+        $grid = $this->getGrid();
 
         if (!$grid->isAllowEdit()) {
-            throw new ATF_Exception_NotAllowed();
+            throw new \Exception('You are not allowed to do this.');
         }
 
-        $itemId = $this->_getParam('id');
+        $itemId = $this->params('id');
 
-        /** @var Zend_Form */
+        if (!$itemId) {
+            throw new \Exception('No record found.');
+        }
+
+        $requestParams = $this->getRequest()->getPost();
+
         $form = $grid->getForm();
+        $form->setData($requestParams);
 
-        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+        if ($this->getRequest()->isPost() && $form->isValid()) {
             $data = $this->preSave($form);
 
             $grid->save($data, $itemId);
 
             $this->postSave($grid, $itemId);
 
-            $this->_helper->flashMessenger->addMessage('Данные записи #' . $itemId . ' успешно сохранены.');
-            $this->_helper->backToUrl();
+            //$this->_helper->flashMessenger->addMessage('Данные записи #' . $itemId . ' успешно сохранены.');
+            //$this->_helper->backToUrl();
         }
 
         $item = $grid->getRow($itemId);
-        $this->view->item = $item;
+        $form->setData($item);
 
-        $form->setDefaults($item->toArray());
-        $this->view->form = $form;
+        //$currentPanel = $this->getRequest()->getParam('panel');
+        //$this->view->panel = $currentPanel;
 
-        $this->view->grid = $grid;
+        $viewModel = new ViewModel(array(
+            'grid' => $grid,
+            'item' => $item
+        ));
+        $viewModel->setTemplate('at-admin/datagrid/edit');
 
-        $currentPanel = $this->getRequest()->getParam('panel');
-        $this->view->panel = $currentPanel;
-
-        echo $this->renderScript('grid/edit.tpl');
+        return $viewModel;
     }
 
     /**

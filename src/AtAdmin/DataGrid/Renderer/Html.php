@@ -3,16 +3,16 @@
 namespace AtAdmin\DataGrid\Renderer;
 
 /**
- * @todo Rename to ATF_DataGrid_Renderer_ZendView
+ * @todo Rename to AtAdmin\DataGrid\Renderer\ZendViewPhpRenderer
  */
 class Html extends AbstractRenderer
 {
     /**
      * View object
      *
-     * @var Zend_View_Abstract
+     * @var \Zend\View\Renderer\PhpRenderer
      */
-    protected $view = null;
+    protected $engine = null;
 
     /**
      * Html template
@@ -31,23 +31,23 @@ class Html extends AbstractRenderer
     /**
      * Set view object
      */
-    public function setView(\Zend\View\Renderer\PhpRenderer $view)
+    public function setEngine(\Zend\View\Renderer\PhpRenderer $engine)
     {
-    	$this->view = $view;
+    	$this->engine = $engine;
     	return $this;
     }
 
     /**
-     * @return Zend_View_Abstract|null
+     * @return null|\Zend\View\Renderer\PhpRenderer
      */
-    public function getView()
+    public function getEngine()
     {
-        return $this->view;
+        return $this->engine;
     }
 
     /**
-     * @param  $template
-     * @return ATF_DataGrid_Renderer_Html
+     * @param $template
+     * @return Html
      */
     public function setTemplate($template)
     {
@@ -64,8 +64,8 @@ class Html extends AbstractRenderer
     }
 
     /**
-     * @param  $path
-     * @return ATF_DataGrid_Renderer_Html
+     * @param $path
+     * @return Html
      */
     public function setCssFile($path)
     {
@@ -79,7 +79,8 @@ class Html extends AbstractRenderer
      */
     public function render($variables = array())
     {
-        $view = $this->getView();
+        $engine = $this->getEngine();
+
         $viewModel = new \Zend\View\Model\ViewModel($variables);
         $viewModel->setTemplate($this->getTemplate());
 
@@ -87,6 +88,6 @@ class Html extends AbstractRenderer
             //$this->getView()->headLink()->appendStylesheet($this->cssFile);
         }
 
-        return $view->render($viewModel);
+        return $engine->render($viewModel);
     }
 }

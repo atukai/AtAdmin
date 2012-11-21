@@ -11,6 +11,11 @@ abstract class AbstractDataSource
     const LIST_TYPE_TREE  = 'tree';
 
     /**
+     * @var string
+     */
+    protected $identifierFieldName = 'id';
+
+    /**
      * All columns
      *
      * @var array
@@ -18,9 +23,9 @@ abstract class AbstractDataSource
     protected $columns = array();
 
     /**
-     * @var null|\Zend\Paginator\Paginator
+     * @var
      */
-    protected $paginator = null;
+    protected $paginator;
 
     /**
      * Constructor
@@ -33,9 +38,7 @@ abstract class AbstractDataSource
             $options = $options->toArray();
             $this->setOptions($options);
         } else {
-            throw new \Exception(
-                'Data source parameters must be in an array or a \Zend\Config\Config object'
-            );
+            throw new \Exception('Data source parameters must be in an array or a \Zend\Config\Config object');
         }
 	}
 
@@ -50,7 +53,6 @@ abstract class AbstractDataSource
 
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
-
             if (method_exists($this, $method)) {
                 $this->$method($value);
             }
@@ -60,7 +62,34 @@ abstract class AbstractDataSource
     }
 
     /**
-     * @return null|\Zend\Paginator\Paginator
+     * @param $name
+     * @return AbstractDataSource
+     */
+    public function setIdentifierFieldName($name)
+    {
+        $this->identifierFieldName = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifierFieldName()
+    {
+        return $this->identifierFieldName;
+    }
+
+    /**
+     * @param $paginator
+     */
+    public function setPaginator($paginator)
+    {
+        $this->paginator = $paginator;
+        return $this;
+    }
+
+    /**
+     * @return mixed
      */
     public function getPaginator()
     {
@@ -76,6 +105,8 @@ abstract class AbstractDataSource
     }
 
     /**
+     * Load columns from source
+     *
      * @abstract
      * @return mixed
      */
@@ -83,10 +114,10 @@ abstract class AbstractDataSource
 
     /**
      * @abstract
-     * @param $key
+     * @param $id
      * @return mixed
      */
-    abstract public function getRow($key);
+    abstract public function find($id);
     
     /**
      * @abstract
@@ -97,7 +128,7 @@ abstract class AbstractDataSource
      * @param $pageRange
      * @return mixed
      */
-    abstract public function getRows($listType, $order, $currentPage, $itemsPerPage, $pageRange);
+    abstract public function fetch($listType, $order, $currentPage, $itemsPerPage, $pageRange);
     
     /**
      * @abstract
