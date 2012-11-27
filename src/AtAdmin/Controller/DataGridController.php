@@ -84,7 +84,8 @@ class DataGridController extends AbstractActionController
     }
 
     /**
-     * @throws ATF_Exception_NotAllowed
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Exception
      */
     public function editAction()
     {
@@ -134,22 +135,28 @@ class DataGridController extends AbstractActionController
     }
 
     /**
-     * @throws ATF_Exception_NotAllowed
+     * @throws \Exception
      */
     public function deleteAction()
     {
-        $grid = $this->_getGrid();
+        $grid = $this->getGrid();
+
         if (!$grid->isAllowDelete()) {
-            throw new ATF_Exception_NotAllowed();
+            throw new \Exception('You are not allowed to do this.');
         }
 
-        $itemId = $this->_getParam('id');
+        $itemId = $this->params('id');
+
+        if (!$itemId) {
+            throw new \Exception('No record found.');
+        }
+
         $grid->delete($itemId);
 
-        $this->_helper->flashMessenger->addMessage('Запись #' . $itemId . ' удалена.');
+        //$this->_helper->flashMessenger->addMessage('Запись #' . $itemId . ' удалена.');
 
         // Back to previous page
-        $this->_helper->backToUrl();
+        //$this->_helper->backToUrl();
     }
 
     /**
