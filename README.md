@@ -26,3 +26,7 @@ To override the built in admin layout with your custom layout follow to the next
 
 1. In your module under the `view` directory create the folder `layout`
 2. Create the override script `admin.phtml`
+
+## Future
+Soon I'll split this module into two different. AtAdmin will be an extended version of ZfcAdmin. And AtDataGrid
+will contain a data grid component
