@@ -14,6 +14,7 @@ A [Zend Framework 2](http://framework.zend.com) module based on [ZfcAdmin](https
 
  1. Add `"atukai/at-admin": "dev-master"` to your `composer.json` file and run `php composer.phar update`.
  2. Add `AtAdmin` to your `config/application.config.php` file under the `modules` key after `ZfcAdmin`.
+ 3. Copy or create a symlink of public/css and public/js to your website root directory
 
 ## Configuration
 
