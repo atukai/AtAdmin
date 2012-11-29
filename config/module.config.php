@@ -23,7 +23,6 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'AtAdmin\Controller\Dashboard' => 'AtAdmin\Controller\DashboardController',
-            'AtAdmin\Controller\DataGrid'  => 'AtAdmin\Controller\DataGridController'
         ),
     ),
 
