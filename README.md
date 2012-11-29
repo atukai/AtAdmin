@@ -1,9 +1,8 @@
 # AtAdmin
 
-Version 0.0.1
+Version 0.1.0
 
-AtAdmin is a [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) based [Zend Framework 2](http://framework.zend.com) module 
-which provides a admin panel functionality. It ships with components to generate grids and forms.
+A [Zend Framework 2](http://framework.zend.com) module based on [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) and provides an extra admin panel functionality.
 
 ## Requirements
 
