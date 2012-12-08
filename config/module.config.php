@@ -14,7 +14,39 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-
+                    'system' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route'    => '/system',
+                            'defaults' => array(
+                                'controller' => 'AtAdmin\Controller\System',
+                                'action'     => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'modules' => array(
+                                'type' => 'literal',
+                                'options' => array(
+                                    'route'    => '/modules',
+                                    'defaults' => array(
+                                        'controller' => 'bjymodulus_modules_controller',
+                                        'action'     => 'index',
+                                    ),
+                                )
+                            ),
+                            'settings' => array(
+                                'type' => 'literal',
+                                'options' => array(
+                                    'route'    => '/settings',
+                                    'defaults' => array(
+                                        'controller' => 'AtAdmin\Controller\System',
+                                        'action'     => 'settings',
+                                    ),
+                                )
+                            ),
+                        )
+                    ),
                 )
             ),
         ),
@@ -23,6 +55,26 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'AtAdmin\Controller\Dashboard' => 'AtAdmin\Controller\DashboardController',
+        ),
+    ),
+
+    'navigation' => array(
+        'admin' => array(
+            'system' => array(
+                'label' => 'System',
+                'route' => 'zfcadmin/system',
+                'order' => 100,
+                'pages' => array(
+                    'modules' => array(
+                        'label' => 'Modules',
+                        'route' => 'zfcadmin/system/modules'
+                    ),
+                    'settings' => array(
+                        'label' => 'Settings',
+                        'route' => 'zfcadmin/system/settings'
+                    ),
+                ),
+            ),
         ),
     ),
 

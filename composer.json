@@ -9,12 +9,18 @@
     "authors": [
         {
             "name": "Alexander Tukai",
-            "email": "atukai@gmail.com"
+            "email": "atukai@gmail.com",
+            "homepage": "https://github.com/atukai"
         }
     ],
     "require": {
         "zendframework/zendframework": "2.*",
-        "zf-commons/zfc-admin": "dev-master"
+        "zf-commons/zfc-admin": "dev-master",
+        "bjyoungblood/bjy-modulus": "dev-master"
+    },
+    "suggest": {
+        "bjyoungblood/bjy-authorize": "For protection of your admin pages",
+        "atukai/at-datagrid": "AtDataGrid for data grids management"
     },
     "autoload": {
         "psr-0": {

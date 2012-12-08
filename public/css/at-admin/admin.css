@@ -6,6 +6,10 @@ li {list-style: none;}
 
 input[type="text"], input[type="password"] {height: 24px;}
 
+.navbar-inner {background: #f2f2f2 url(/images/at-admin/bg/bg-navbar.gif) repeat-x top;}
+
+div.container a.brand {min-width: 100px;}
+
 .navbar .nav > li {margin-top: 9px;}
 .navbar .nav > li > a {padding: 2px 8px;}
 
@@ -22,15 +26,6 @@ textarea {min-height: 100px;}
 .right {float: right}
 .center {text-align: center}
 .b {font-weight: bold}
-
-/* Colors */
-.green {color: #68b604;}
-.green2 {color: #58AA00;}
-.magenta {color: #A839B2;}
-.pink {color: #FF0071;}
-.olive {color: #ACD030;}
-.turquoise {color: #00AA78}
-.blue {color: #0074AE}
 
 /* Site */
 .main-menu li {font-size: 10px; text-transform: uppercase;}
