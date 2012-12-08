@@ -26,5 +26,6 @@ class Module
     public function init($moduleManager)
     {
         $moduleManager->loadModule('ZfcAdmin');
+        $moduleManager->loadModule('BjyModulus');
     }
 }
