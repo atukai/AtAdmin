@@ -15,10 +15,10 @@
     ],
     "require": {
         "zendframework/zendframework": "2.*",
-        "zf-commons/zfc-admin": "dev-master",
-        "bjyoungblood/bjy-modulus": "dev-master"
+        "zf-commons/zfc-admin": "dev-master"
     },
     "suggest": {
+        "bjyoungblood/bjy-modulus": "For modules management",
         "bjyoungblood/bjy-authorize": "For protection of your admin pages",
         "atukai/at-datagrid": "AtDataGrid for data grids management"
     },

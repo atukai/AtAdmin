@@ -9,7 +9,7 @@ functionality.
 
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin)
-* [BjyModulus](https://github.com/bjyoungblood/BjyModulus)
+* [BjyModulus](https://github.com/bjyoungblood/BjyModulus) (recommended)
 
 ## Features
 
