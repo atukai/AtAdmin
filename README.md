@@ -1,6 +1,6 @@
 # AtAdmin
 
-Version 0.1.0
+Version 0.1.1
 
 A ZF2 module based on [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin). It provides an additional admin panel
 functionality.
@@ -13,6 +13,7 @@ functionality.
 
 ## Features
 
+* Theme based on [Twitter Bootstrap](http://twitter.github.com/bootstrap/)
 * Custom layout for [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) with two-level menu
 * Integration with [BjyModulus](https://github.com/bjyoungblood/BjyModulus)
 

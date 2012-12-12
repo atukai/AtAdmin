@@ -62,13 +62,14 @@ return array(
         'admin' => array(
             'system' => array(
                 'label' => 'System',
+                'id' => 'system-page',
                 'route' => 'zfcadmin/system',
                 'order' => 100,
                 'pages' => array(
-                    'modules' => array(
+                   /* 'modules' => array(
                         'label' => 'Modules',
                         'route' => 'zfcadmin/system/modules'
-                    ),
+                    ),*/
                     'settings' => array(
                         'label' => 'Settings',
                         'route' => 'zfcadmin/system/settings'

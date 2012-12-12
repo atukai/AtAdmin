@@ -8,10 +8,10 @@
 
         <!-- Styles -->
         <?= $this->headLink()->prependStylesheet($this->basePath() . '/css/at-admin/admin.css')
-                             ->prependStylesheet('//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css') ?>
+                             ->prependStylesheet('//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css') ?>
 
         <!-- Scripts -->
-        <?= $this->headScript()->prependFile('//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js')
+        <?= $this->headScript()->prependFile('//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js')
                                ->prependFile('//code.jquery.com/jquery.min.js')
                                ->prependFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))?>
 
@@ -32,19 +32,19 @@
                         <ul class="nav">
                             <?php foreach ($this->navigation('admin_navigation')->getContainer() as $item): ?>
                                 <?php if ($item->hasPages()): ?>
-                                    <li class="dropdown">
+                                <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <?= $this->translate($item->getLabel()) ?>
+                                            <?php echo $this->translate($item->getLabel()) ?>
                                             <b class="caret"></b>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <?php foreach ($item as $page): ?>
-                                            <li><a href="<?= $page->getHref() ?>"><?= $this->translate($page->getLabel()) ?></a></li>
+                                            <?php foreach ($item->getPages() as $page): ?>
+                                            <li><a href="<?php echo $page->getHref() ?>"><?php echo $this->translate($page->getLabel()) ?></a></li>
                                             <?php endforeach; ?>
                                         </ul>
                                     </li>
                                 <?php else: ?>
-                                    <li><a href="<?= $item->getHref() ?>"><?= $this->translate($item->getLabel()) ?></a></li>
+                                    <li><a href="<?php echo $item->getHref() ?>"><?php echo $this->translate($item->getLabel()) ?></a></li>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
@@ -55,7 +55,7 @@
 
         <div class="container">
 
-            <?= $this->content; ?>
+            <?php echo $this->content; ?>
 
             <hr>
 
