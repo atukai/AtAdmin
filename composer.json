@@ -1,6 +1,6 @@
 {
     "name": "atukai/at-admin",
-    "description": "A ZF2 module based on ZfcAdmin and provides an extra admin panel functionality.",
+    "description": "The missing ZF2 Admin module constructor.",
     "type": "library",
     "keywords": [
         "admin", "administration", "manage", "AtAdmin", "atukai", "at", "zf2"
@@ -19,8 +19,9 @@
     },
     "suggest": {
         "bjyoungblood/bjy-modulus": "For modules management",
-        "bjyoungblood/bjy-authorize": "For protection of your admin pages",
-        "atukai/at-datagrid": "AtDataGrid for data grids management"
+        "bjyoungblood/bjy-authorize": "For protection of your admin pages with ACL",
+        "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC",
+        "atukai/at-datagrid": "ZF2 module for data grids management"
     },
     "autoload": {
         "psr-0": {

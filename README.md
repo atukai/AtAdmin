@@ -2,8 +2,7 @@
 
 Version 0.1.1
 
-A ZF2 module based on [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin). It provides an additional admin panel
-functionality.
+The missing ZF2 Admin module constructor based on [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin).
 
 ## Requirements
 

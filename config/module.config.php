@@ -30,8 +30,8 @@ return array(
                                 'options' => array(
                                     'route'    => '/modules',
                                     'defaults' => array(
-                                        'controller' => 'bjymodulus_modules_controller',
-                                        'action'     => 'index',
+                                        'controller' => 'AtAdmin\Controller\System',
+                                        'action'     => 'modules',
                                     ),
                                 )
                             ),
@@ -55,6 +55,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'AtAdmin\Controller\Dashboard' => 'AtAdmin\Controller\DashboardController',
+            'AtAdmin\Controller\System'    => 'AtAdmin\Controller\SystemController',
         ),
     ),
 
