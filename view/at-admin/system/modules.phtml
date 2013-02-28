@@ -1,4 +1,4 @@
-<h1>Loaded modules</h1>
+<h1><?php echo $this->translate('Loaded modules') ?></h1>
 
 <table class="table table-condensed">
     <tr>
@@ -9,9 +9,9 @@
     </tr>
     <?php foreach ($this->modules as $name => $data) : ?>
     <tr>
-        <td><?php echo $name ?></td>
-        <td><?php echo $data['local'] ?></td>
-        <td><?php echo $data['upstreamHash'] ?></td>
+        <td><?php echo $name; ?></td>
+        <td><?php echo $data['localHash']; ?></td>
+        <td><?php echo $data['upstreamHash']; ?></td>
         <td><?php echo $data['status']; ?></td>
     </tr>
     <?php endforeach; ?>

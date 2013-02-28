@@ -15,7 +15,7 @@
     ],
     "require": {
         "zendframework/zendframework": "2.*",
-        "zf-commons/zfc-admin": "dev-master"
+        "zf-commons/zfc-admin": "0.*"
     },
     "suggest": {
         "bjyoungblood/bjy-modulus": "For modules management",
