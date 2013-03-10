@@ -10,13 +10,13 @@ class SystemController extends AbstractActionController
     public function modulesAction()
     {
         $modulesService = $this->getServiceLocator()->get('bjymodulus_modules_service');
-        $modules = Module::getLoadedModules();
+        $loadedModules = Module::getLoadedModules();
 
-        $moduleVersions = array();
-        foreach ($modules as $name => $module) {
-            $moduleVersions[$name] = $modulesService->getModuleCommitHashes($name);
+        $modules = array();
+        foreach ($loadedModules as $name => $module) {
+            $modules[$name] = $modulesService->getModuleInfo($name);
         }
 
-        return array('modules' => $moduleVersions);
+        return array('modules' => $modules);
     }
 }

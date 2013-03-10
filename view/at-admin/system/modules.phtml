@@ -3,15 +3,15 @@
 <table class="table table-condensed">
     <tr>
         <th>Module</th>
-        <th>HEAD</th>
-        <th>upstream/master</th>
+        <th>Local version</th>
+        <th>Remote hash</th>
         <th>Status</th>
     </tr>
     <?php foreach ($this->modules as $name => $data) : ?>
     <tr>
         <td><?php echo $name; ?></td>
-        <td><?php echo $data['localHash']; ?></td>
-        <td><?php echo $data['upstreamHash']; ?></td>
+        <td><?php echo $data['version']; ?></td>
+        <td><?php echo $data['remoteHash']; ?></td>
         <td><?php echo $data['status']; ?></td>
     </tr>
     <?php endforeach; ?>
