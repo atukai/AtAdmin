@@ -1,19 +1,21 @@
 # AtAdmin
 
-Version 0.1.2
+Version 0.1.3
 
-The missing ZF2 Admin module constructor based on [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin).
+The missing ZF2 Admin module constructor.
 
 ## Requirements
 
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin)
-* [BjyModulus](https://github.com/bjyoungblood/BjyModulus) (recommended)
+* [AtDataGrid](https://github.com/atukai/AtDataGrid)
+* [BjyModulus](https://github.com/bjyoungblood/BjyModulus) (optional)
 
 ## Features
 
 * Theme based on [Twitter Bootstrap](http://twitter.github.com/bootstrap/)
 * Custom layout for [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) with two-level menu
+* Integration with [AtDataGrid](https://github.com/atukai/AtDataGrid)
 * Integration with [BjyModulus](https://github.com/bjyoungblood/BjyModulus)
 
 ## Installation
