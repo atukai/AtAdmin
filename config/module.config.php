@@ -25,16 +25,6 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'modules' => array(
-                                'type' => 'literal',
-                                'options' => array(
-                                    'route'    => '/modules',
-                                    'defaults' => array(
-                                        'controller' => 'AtAdmin\Controller\System',
-                                        'action'     => 'modules',
-                                    ),
-                                )
-                            ),
                             'settings' => array(
                                 'type' => 'literal',
                                 'options' => array(
@@ -67,10 +57,6 @@ return array(
                 'route' => 'zfcadmin/system',
                 'order' => 100,
                 'pages' => array(
-                   /* 'modules' => array(
-                        'label' => 'Modules',
-                        'route' => 'zfcadmin/system/modules'
-                    ),*/
                     'settings' => array(
                         'label' => 'Settings',
                         'route' => 'zfcadmin/system/settings'

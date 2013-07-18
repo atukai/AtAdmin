@@ -4,7 +4,7 @@ namespace AtAdmin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use AtDataGrid\DataGrid\Manager;
+use AtDataGrid\Manager;
 
 abstract class AbstractDataGridController extends AbstractActionController
 {

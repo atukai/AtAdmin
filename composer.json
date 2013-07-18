@@ -14,9 +14,9 @@
         }
     ],
     "require": {
-        "zendframework/zendframework": ">=2.1.4",
+        "zendframework/zendframework": ">=2.2.1",
         "zf-commons/zfc-admin": "0.*",
-        "atukai/at-datagrid": "0.*"
+        "atukai/at-datagrid": ">=0.2.3"
     },
     "suggest": {
         "bjyoungblood/bjy-modulus": "For modules management",
