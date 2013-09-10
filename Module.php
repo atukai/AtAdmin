@@ -35,36 +35,4 @@ class Module
             ),
         );
     }
-
-    /**
-     * @param \Zend\EventManager\EventInterface $e
-     */
-    public function onBootstrap(\Zend\EventManager\EventInterface $e)
-    {
-        //$application = $e->getApplication();
-        //$sm = $application->getServiceManager();
-        //$mm = $sm->get('ModuleManager');
-
-        //$enabledModules = $mm->getModules();
-
-        //if (in_array('AtAdminModules', $enabledModules)) {
-        //    /** @var \Zend\Mvc\Router\Http\TreeRouteStack $router  */
-        //    $router = $application->getMvcEvent()->getRouter();
-        //    $adminNavigation = $sm->get('admin_navigation');
-
-        //    $systemMenuItem = $adminNavigation->findOneById('system-page');
-
-        //    if ($systemMenuItem) {
-                /** @todo How to dinamically add route? */
-
-        //        $systemMenuItem->addPage(
-        //            array(
-        //               'label'       => 'Modules',
-        //                'route'       => 'zfcadmin/system/modules',
-        //                'router'      => $router,
-        //            )
-        //        );
-        //    }
-        //}
-    }
 }

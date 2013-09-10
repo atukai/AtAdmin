@@ -7,51 +7,71 @@
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Styles -->
-        <?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/at-admin/admin.css')
-                             ->prependStylesheet('//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css') ?>
+        <?php echo $this->headLink()
+            ->prependStylesheet($this->basePath() . '/css/at-admin/admin.css')
+            ->prependStylesheet('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile('//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js')
-                               ->prependFile('//code.jquery.com/jquery.min.js')
-                               ->prependFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))?>
+        <?php echo $this->headScript()->prependFile('////netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
+            ->prependFile('//code.jquery.com/jquery.min.js')
+            ->prependFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))?>
 
     </head>
 
     <body>
-
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="<?php echo $this->url('zfcadmin') ?>">AtAdmin</a>
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <?php foreach ($this->navigation('admin_navigation')->getContainer() as $item): ?>
-                                <?php if ($item->hasPages()): ?>
+                    </button>
+                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>">AtAdmin</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav main-menu">
+                        <?php foreach ($this->navigation('admin-navigation')->getContainer() as $item): ?>
+                            <?php if ($item->hasPages()): ?>
                                 <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <?php echo $this->translate($item->getLabel()) ?>
-                                            <b class="caret"></b>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <?php foreach ($item->getPages() as $page): ?>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <?php echo $this->translate($item->getLabel()) ?>
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <?php foreach ($item->getPages() as $page): ?>
                                             <li><a href="<?php echo $page->getHref() ?>"><?php echo $this->translate($page->getLabel()) ?></a></li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </li>
-                                <?php else: ?>
-                                    <li><a href="<?php echo $item->getHref() ?>"><?php echo $this->translate($item->getLabel()) ?></a></li>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div><!--/.nav-collapse -->
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </li>
+                            <?php else: ?>
+                                <li><a href="<?php echo $item->getHref() ?>"><?php echo $this->translate($item->getLabel()) ?></a></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+
+                    <ul class="nav pull-right main-menu user-block">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="<?= $this->zfcUserDisplayName(); ?>">
+                                <i class="icon-user"></i><b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="username">
+                                    <a href="<?= $this->url('zfcuser') ?>" title="Profile">
+                                        <i class="icon-user"></i>
+                                        <span class="b"><?= $this->zfcUserDisplayName(); ?></span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?= $this->url('zfcuser/logout') ?>" title="Logout">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
 
         <div class="container">
 

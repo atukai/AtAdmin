@@ -8,23 +8,19 @@ The missing ZF2 Admin module constructor.
 
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin)
-* [AtDataGrid](https://github.com/atukai/AtDataGrid)
 
 ## Features
 
 * Theme based on [Twitter Bootstrap](http://twitter.github.com/bootstrap/)
 * Custom layout for [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) with two-level menu
-* Integration with [AtDataGrid](https://github.com/atukai/AtDataGrid)
 
 ## Installation
 
- 1. Add `"atukai/at-admin": "0.*"` to your `composer.json` file and run `php composer.phar update`.
+ 1. Add `"atukai/at-admin": "dev-master"` to your `composer.json` file and run `php composer.phar update`.
  2. Add `AtAdmin` to your `config/application.config.php` file under the `modules` key after `ZfcAdmin`.
  3. Copy or create a symlink of public/css, public/js and public/images to your website root directory
 
 ## Configuration
-
-See [AtCms](https://github.com/atukai/AtCms) as example.
 
 ### Layout
 AtAdmin ships with built in layout which override default ZfcAdmin layout.

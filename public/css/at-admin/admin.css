@@ -1,31 +1,5 @@
-body {padding: 30px 0; min-height: 100%;}
+body {padding: 40px 0;}
 body > .container {padding: 30px; min-height: 400px;}
 
-ul {margin: 0; padding: 0;}
-li {list-style: none;}
-
-input[type="text"], input[type="password"] {height: 24px;}
-
-.navbar-inner {background: #f2f2f2 url(/images/at-admin/bg/bg-navbar.gif) repeat-x top;}
-
-div.container a.brand {min-width: 100px;}
-
-.navbar .nav > li {margin-top: 9px;}
-.navbar .nav > li > a {padding: 2px 8px;}
-
-h1 {font-size: 32px; color: #09c; font-weight: normal; margin-bottom:18px;}
-
-/* Forms*/
-label {font-size: 14px;}
-input, textarea, select {width: 250px; font-size: 14px;}
-textarea {min-height: 100px;}
-.form-actions {background: none; padding: 10px 0; margin-bottom: 0;}
-
 /* Misc */
-.left {float: left}
-.right {float: right}
-.center {text-align: center}
 .b {font-weight: bold}
-
-/* Site */
-.main-menu li {font-size: 10px; text-transform: uppercase;}
