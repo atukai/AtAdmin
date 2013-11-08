@@ -2,29 +2,25 @@
 
 namespace AtAdmin;
 
-use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
 
-class Module
+class Module implements
+    ConfigProviderInterface,
+    AutoloaderProviderInterface,
+    DependencyIndicatorInterface
 {
-    /**
-     * @param $moduleManager
-     */
-    public function init(ModuleManager $moduleManager)
+    public function getModuleDependencies()
     {
-        $moduleManager->loadModule('ZfcAdmin');
+        return array('ZfcAdmin');
     }
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
-    /**
-     * @return array
-     */
     public function getAutoloaderConfig()
     {
         return array(
