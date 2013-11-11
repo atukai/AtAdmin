@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "zendframework/zendframework": ">=2.2.1",
+        "zendframework/zendframework": "2.2.*",
         "zf-commons/zfc-admin": "0.*",
-        "atukai/at-datagrid": ">=0.2.3"
+        "atukai/at-datagrid": "dev-master"
     },
     "suggest": {
-        "bjyoungblood/bjy-modulus": "For modules management",
+        "atukai/at-admin-modules": "For modules management",
         "bjyoungblood/bjy-authorize": "For protection of your admin pages with ACL",
         "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC"
     },

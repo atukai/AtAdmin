@@ -1,7 +1,5 @@
 # AtAdmin
 
-Version 0.1.4
-
 The missing ZF2 Admin module constructor.
 
 ## Requirements
