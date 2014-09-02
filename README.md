@@ -1,6 +1,8 @@
-# AtAdmin
+# AtAdmin [0.1.5-dev]
 
 The missing ZF2 Admin module constructor.
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atukai/AtAdmin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atukai/AtAdmin/?branch=master)
 
 ## Requirements
 
@@ -9,7 +11,7 @@ The missing ZF2 Admin module constructor.
 
 ## Features
 
-* Theme based on [Twitter Bootstrap](http://twitter.github.com/bootstrap/)
+* Theme based on [Twitter Bootstrap](http://getbootstrap.com/)
 * Custom layout for [ZfcAdmin](https://github.com/ZF-Commons/ZfcAdmin) with two-level menu
 
 ## Installation
