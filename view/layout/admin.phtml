@@ -34,7 +34,7 @@
                         <?php foreach ($this->navigation('admin-navigation')->getContainer() as $item): ?>
                             <?php if ($item->hasPages()): ?>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Profile">
                                         <?php echo $this->translate($item->getLabel()) ?>
                                         <b class="caret"></b>
                                     </a>
@@ -52,19 +52,19 @@
 
                     <ul class="nav navbar-nav pull-right main-menu user-block">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="<?= $this->zfcUserDisplayName(); ?>">
-                                <i class="icon-user"></i><b class="caret"></b>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="<?= $this->translate('Profile') ?>">
+                                <span class="glyphicon glyphicon-user"></span><b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="username">
-                                    <a href="<?= $this->url('zfcuser') ?>" title="Profile">
-                                        <i class="icon-user"></i>
-                                        <span class="b"><?= $this->zfcUserDisplayName(); ?></span>
+                                    <a href="" title="Profile">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                        <span class="b">Username</span>
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="<?= $this->url('zfcuser/logout') ?>" title="Logout">Logout</a>
+                                    <a href="" title="Logout">Logout</a>
                                 </li>
                             </ul>
                         </li>

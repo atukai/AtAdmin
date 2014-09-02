@@ -14,24 +14,24 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'system' => array(
+                    'settings' => array(
                         'type' => 'literal',
                         'options' => array(
                             'route'    => '/system',
                             'defaults' => array(
-                                'controller' => 'AtAdmin\Controller\System',
+                                'controller' => 'AtAdmin\Controller\Settings',
                                 'action'     => 'index',
                             ),
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'settings' => array(
+                            'general' => array(
                                 'type' => 'literal',
                                 'options' => array(
-                                    'route'    => '/settings',
+                                    'route'    => '/general',
                                     'defaults' => array(
-                                        'controller' => 'AtAdmin\Controller\System',
-                                        'action'     => 'settings',
+                                        'controller' => 'AtAdmin\Controller\Settings',
+                                        'action'     => 'general',
                                     ),
                                 )
                             ),
@@ -45,21 +45,21 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'AtAdmin\Controller\Dashboard' => 'AtAdmin\Controller\DashboardController',
-            'AtAdmin\Controller\System'    => 'AtAdmin\Controller\SystemController',
+            'AtAdmin\Controller\Settings'    => 'AtAdmin\Controller\SettingsController',
         ),
     ),
 
     'navigation' => array(
         'admin' => array(
             'system' => array(
-                'label' => 'System',
-                'id' => 'system-page',
-                'route' => 'zfcadmin/system',
+                'label' => 'Settings',
+                'id' => 'settings-page',
+                'route' => 'zfcadmin/settings',
                 'order' => 100,
                 'pages' => array(
                     'settings' => array(
-                        'label' => 'Settings',
-                        'route' => 'zfcadmin/system/settings'
+                        'label' => 'General',
+                        'route' => 'zfcadmin/settings/general'
                     ),
                 ),
             ),
@@ -71,4 +71,8 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+
+    'at_admin' => [
+        'logout_route' => ''
+    ]
 );
