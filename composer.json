@@ -14,8 +14,8 @@
         }
     ],
     "require": {
-        "zendframework/zendframework": "2.2.*",
-        "zf-commons/zfc-admin": "0.*",
+        "zendframework/zendframework": "2.*",
+        "zf-commons/zfc-admin": "*",
         "atukai/at-datagrid": "dev-master"
     },
     "suggest": {

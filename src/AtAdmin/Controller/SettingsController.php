@@ -5,9 +5,9 @@ namespace AtAdmin\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class SystemController extends AbstractActionController
+class SettingsController extends AbstractActionController
 {
-    public function settingsAction()
+    public function generalAction()
     {
         return new ViewModel();
     }

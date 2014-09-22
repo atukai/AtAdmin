@@ -72,7 +72,7 @@ return array(
         ),
     ),
 
-    'at_admin' => [
+    'atadmin' => array(
         'logout_route' => ''
-    ]
+    )
 );
