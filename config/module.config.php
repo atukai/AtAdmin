@@ -55,7 +55,7 @@ return array(
                 'label' => 'Settings',
                 'id' => 'settings-page',
                 'route' => 'zfcadmin/settings',
-                'order' => 100,
+                'order' => 1000,
                 'pages' => array(
                     'general' => array(
                         'label' => 'General',
