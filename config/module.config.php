@@ -51,13 +51,13 @@ return array(
 
     'navigation' => array(
         'admin' => array(
-            'system' => array(
+            'settings' => array(
                 'label' => 'Settings',
                 'id' => 'settings-page',
                 'route' => 'zfcadmin/settings',
                 'order' => 100,
                 'pages' => array(
-                    'settings' => array(
+                    'general' => array(
                         'label' => 'General',
                         'route' => 'zfcadmin/settings/general'
                     ),
