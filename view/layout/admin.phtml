@@ -1,8 +1,8 @@
 <?php echo $this->doctype(); ?>
-<html lang="en">
+<html>
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('AtAdmin Admin Panel')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('AtAdmin Admin Panel')->setSeparator(' | ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
@@ -12,7 +12,7 @@
             ->prependStylesheet('//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile('////netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
+        <?php echo $this->headScript()->prependFile('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
             ->prependFile('//code.jquery.com/jquery.min.js')
             ->prependFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))?>
 

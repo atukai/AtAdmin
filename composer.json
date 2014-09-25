@@ -1,6 +1,6 @@
 {
     "name": "atukai/at-admin",
-    "description": "The missing ZF2 Admin module constructor.",
+    "description": "The missing ZF2 Admin module constructor",
     "type": "library",
     "keywords": [
         "admin", "administration", "manage", "AtAdmin", "atukai", "at", "zf2"

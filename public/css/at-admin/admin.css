@@ -1,5 +1,5 @@
 body {padding: 40px 0;}
-body > .container {margin-top: 40px; min-height: 400px;}
+body > .container {min-height: 400px;}
 
 /* Misc */
 .b {font-weight: bold}
