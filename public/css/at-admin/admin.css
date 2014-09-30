@@ -1,5 +1,12 @@
 body {padding: 40px 0;}
 body > .container {min-height: 400px;}
 
+footer {
+    color: #777;
+    border-top: 1px solid #eee;
+    padding: 12px 0;
+    margin-top: 60px;
+}
+
 /* Misc */
 .b {font-weight: bold}

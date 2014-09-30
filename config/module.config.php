@@ -72,6 +72,16 @@ return array(
         ),
     ),
 
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type'     => 'gettext',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.mo',
+            ],
+        ],
+    ],
+
     'atadmin' => array(
         'logout_route' => ''
     )

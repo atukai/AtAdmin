@@ -4,18 +4,20 @@
         <meta charset="utf-8">
         <?php echo $this->headTitle('AtAdmin Admin Panel')->setSeparator(' | ')->setAutoEscape(false) ?>
 
-        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
 
         <!-- Styles -->
         <?php echo $this->headLink()
-            ->prependStylesheet($this->basePath() . '/css/at-admin/admin.css')
-            ->prependStylesheet('//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css') ?>
+            ->appendStylesheet('//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+            ->appendStylesheet($this->basePath() . '/css/at-admin/admin.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
-            ->prependFile('//code.jquery.com/jquery.min.js')
-            ->prependFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))?>
-
+        <?php echo $this->headScript()
+            ->appendFile('//code.jquery.com/jquery.min.js')
+            ->appendFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->appendFile('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js') ?>
     </head>
 
     <body>
@@ -74,16 +76,12 @@
         </nav>
 
         <div class="container">
-
             <?php echo $this->content; ?>
 
-            <hr>
-
-            <footer>
-                 <p>Powered by <a href="https://github.com/atukai/AtAdmin" target="_blank">AtAdmin</a>.</p>
+            <footer class="clearfix">
+                 <p>Powered by <a href="https://github.com/atukai/AtAdmin" target="_blank">AtAdmin</a></p>
             </footer>
-
-        </div> <!-- /container -->
+        </div>
 
         <?php echo $this->inlineScript() ?>
     </body>

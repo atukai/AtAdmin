@@ -16,11 +16,11 @@
     "require": {
         "zendframework/zendframework": "2.*",
         "zf-commons/zfc-admin": "*",
-        "atukai/at-datagrid": "dev-master"
+        "atukai/at-block": "dev-master"
     },
     "suggest": {
+        "atukai/at-datagrid": "For data grid generation",
         "atukai/at-admin-modules": "For modules management",
-        "bjyoungblood/bjy-authorize": "For protection of your admin pages with ACL",
         "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC"
     },
     "autoload": {
