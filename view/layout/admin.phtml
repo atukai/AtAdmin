@@ -52,21 +52,21 @@
                         <?php endforeach; ?>
                     </ul>
 
-                    <ul class="nav navbar-nav pull-right main-menu user-block">
+                    <ul class="nav navbar-nav pull-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="<?= $this->translate('Profile') ?>">
-                                <span class="glyphicon glyphicon-user"></span><b class="caret"></b>
+                                <span class="glyphicon glyphicon-user"></span>
+                                Username<b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="username">
-                                    <a href="" title="Profile">
-                                        <span class="glyphicon glyphicon-user"></span>
-                                        <span class="b">Username</span>
+                                <li>
+                                    <a href="" title="<?= $this->translate('Profile') ?>">
+                                        <span class="b"><?= $this->translate('Profile') ?></span>
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="" title="Logout">Logout</a>
+                                    <a href="" title="<?= $this->translate('Logout') ?>"><?= $this->translate('Logout') ?></a>
                                 </li>
                             </ul>
                         </li>
