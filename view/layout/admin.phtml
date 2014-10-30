@@ -10,14 +10,14 @@
 
         <!-- Styles -->
         <?php echo $this->headLink()
-            ->appendStylesheet('//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+            ->appendStylesheet('https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css')
             ->appendStylesheet($this->basePath() . '/css/at-admin/admin.css') ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
             ->appendFile('//code.jquery.com/jquery.min.js')
             ->appendFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->appendFile('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js') ?>
+            ->appendFile('https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js') ?>
     </head>
 
     <body>
@@ -76,6 +76,9 @@
         </nav>
 
         <div class="container">
+
+            <?php echo $this->flashMessenger()->render('default', array('alert', 'alert-dismissable', 'alert-warning')); ?>
+
             <?php echo $this->content; ?>
 
             <footer class="clearfix">
