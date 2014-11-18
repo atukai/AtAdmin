@@ -3,12 +3,18 @@
 namespace AtAdmin\Controller;
 
 use AtAdmin\Form\FormManager;
+use AtDataGrid\DataGrid;
 use AtDataGrid\Manager as GridManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 abstract class AbstractCrudController extends AbstractActionController
 {
+    /**
+     * @var DataGrid
+     */
+    protected $grid;
+
     /**
      * @var GridManager
      */
@@ -35,12 +41,22 @@ abstract class AbstractCrudController extends AbstractActionController
         // Save back url to redirect after actions
         $this->backTo()->setBackUrl();
 
-        $gridManager = $this->getGridManager();
-        $grid = $gridManager->getGrid();
-
         if (isset($_POST['cmd'])) {
             $this->_forward($_POST['cmd']);    // @todo refactor this
         }
+
+        $grid = $this->getGrid();
+        $grid->setOrder($this->request->getQuery('order', $grid->getIdentifierColumnName().'~desc'));
+
+        if ($this->request->getQuery('page')) {
+            $grid->setCurrentPage($this->request->getQuery('page'));
+        }
+
+        if ($this->request->getQuery('show_items')) {
+            $grid->setItemsPerPage($this->request->getQuery('show_items'));
+        }
+
+        $gridManager = $this->getGridManager();
 
         $filtersForm = $gridManager->getFiltersForm();
         $filtersForm->setData($this->request->getQuery());
@@ -80,9 +96,10 @@ abstract class AbstractCrudController extends AbstractActionController
 
         $viewModel = new ViewModel(array(
             'form' => $form,
+            'tabs' => $this->getFormManager()->getFormTabs(),
             'backUrl' => $this->backTo()->getBackUrl(false),
         ));
-        $viewModel->setTemplate('at-datagrid/create');
+        $viewModel->setTemplate('at-admin/create.phtml');
 
         return $viewModel;
     }
@@ -123,7 +140,7 @@ abstract class AbstractCrudController extends AbstractActionController
             'form'        => $form,
             'backUrl'     => $this->backTo()->getBackUrl(false),
         ));
-        $viewModel->setTemplate('at-datagrid/edit');
+        $viewModel->setTemplate('at-admin/edit.phtml');
 
         return $viewModel;
     }
@@ -149,37 +166,9 @@ abstract class AbstractCrudController extends AbstractActionController
         $this->backTo()->previous('Record deleted.');
     }
 
-    /**
-     * @param FormManager $formManager
-     */
-    public function setFormManager(FormManager $formManager)
-    {
-        $this->formManager = $formManager;
-    }
+    abstract public function getFormManager();
 
-    /**
-     * @return array|FormManager|object
-     */
-    public function getFormManager()
-    {
-        if (! $this->formManager) {
-            $this->formManager = $this->getServiceLocator()->get('AtAdmin\Form\FormManager');
-        }
-
-        return $this->formManager;
-    }
-
-    /**
-     * @param GridManager $gridManager
-     */
-    public function setGridManager(GridManager $gridManager)
-    {
-        $this->gridManager = $gridManager;
-    }
-
-    /**
-     * @abstract
-     * @return mixed
-     */
     abstract public function getGridManager();
+
+    abstract public function getGrid();
 }

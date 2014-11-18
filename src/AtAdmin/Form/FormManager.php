@@ -13,22 +13,14 @@ class FormManager extends EventProvider
     const EVENT_GRID_FORM_BUILD_POST = 'at-datagrid.grid.form.build.post';
 
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * @var Form
      */
     protected $form;
 
     /**
-     * @param Request $request
+     * @var array
      */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    protected $formTabs = array();
 
     /**
      * @param DataGrid $grid
@@ -66,6 +58,9 @@ class FormManager extends EventProvider
             }
 
             $form->add($element);
+
+            //?
+            $this->formTabs['general']['elements'][$element->getName()] = $element;
         }
 
         // Hash element to prevent CSRF attack
@@ -81,5 +76,38 @@ class FormManager extends EventProvider
 
         $this->form = $form;
         return $this->form;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormTabs()
+    {
+        return $this->formTabs;
+    }
+
+    /**
+     * @param $name
+     * @param $tab
+     * @return $this
+     */
+    public function addFormTab($name, $tab)
+    {
+        $this->formTabs[$name] = $tab;
+        return $this;
+    }
+
+    /**
+     * @param $tabName
+     * @param $element
+     * @return $this
+     */
+    public function addFormTabElement($tabName, $element)
+    {
+        $elementName = $tabName . '[' . $element->getName() . ']';
+        $element->setName($elementName);
+
+        $this->formTabs[$tabName]['elements'][] = $element;
+        return $this;
     }
 }

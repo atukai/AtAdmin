@@ -3,7 +3,7 @@
 return array(
     'router' => array(
         'routes' => array(
-            'zfcadmin' => array(
+            'at-admin' => array(
                 'type' => 'literal',
                 'options' => array(
                     'route'    => '/admin',
@@ -13,48 +13,6 @@ return array(
                     ),
                 ),
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'settings' => array(
-                        'type' => 'literal',
-                        'options' => array(
-                            'route'    => '/system',
-                            'defaults' => array(
-                                'controller' => 'AtAdmin\Controller\Settings',
-                                'action'     => 'index',
-                            ),
-                        ),
-                        'may_terminate' => true,
-                        'child_routes' => array(
-                            'general' => array(
-                                'type' => 'literal',
-                                'options' => array(
-                                    'route'    => '/general',
-                                    'defaults' => array(
-                                        'controller' => 'AtAdmin\Controller\Settings',
-                                        'action'     => 'general',
-                                    ),
-                                )
-                            ),
-                        )
-                    ),
-                )
-            ),
-        ),
-    ),
-
-    'navigation' => array(
-        'admin' => array(
-            'settings' => array(
-                'label' => 'Settings',
-                'id' => 'settings-page',
-                'route' => 'zfcadmin/settings',
-                'order' => 1000,
-                'pages' => array(
-                    'general' => array(
-                        'label' => 'General',
-                        'route' => 'zfcadmin/settings/general'
-                    ),
-                ),
             ),
         ),
     ),
@@ -73,17 +31,18 @@ return array(
         )
     ),
 
-    'translator' => [
-        'translation_file_patterns' => [
-            [
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
                 'type'     => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
-            ],
-        ],
-    ],
+            ),
+        ),
+    ),
 
-    'atadmin' => array(
+    'at-admin' => array(
+        'admin_layout' => 'layout/admin',
         'logout_route' => ''
     )
 );
