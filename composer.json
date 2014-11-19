@@ -17,7 +17,7 @@
         "zendframework/zendframework": "2.*",
         "zf-commons/zfc-base": "*",
         "atukai/at-base": "dev-master",
-        "atukai/at-datagrid": "*"
+        "atukai/at-datagrid": "dev-master"
     },
     "suggest": {
         "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC"
