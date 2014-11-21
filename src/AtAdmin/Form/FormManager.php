@@ -5,7 +5,6 @@ namespace AtAdmin\Form;
 use AtDataGrid\DataGrid;
 use Zend\Form\Form;
 use Zend\Form\Element;
-use Zend\Http\PhpEnvironment\Request;
 use ZfcBase\EventManager\EventProvider;
 
 class FormManager extends EventProvider
@@ -58,9 +57,6 @@ class FormManager extends EventProvider
             }
 
             $form->add($element);
-
-            //?
-            $this->formTabs['general']['elements'][$element->getName()] = $element;
         }
 
         // Hash element to prevent CSRF attack
@@ -75,6 +71,7 @@ class FormManager extends EventProvider
         $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form);
 
         $this->form = $form;
+
         return $this->form;
     }
 
@@ -88,12 +85,12 @@ class FormManager extends EventProvider
 
     /**
      * @param $name
-     * @param $tab
+     * @param $options
      * @return $this
      */
-    public function addFormTab($name, $tab)
+    public function addFormTab($name, $options)
     {
-        $this->formTabs[$name] = $tab;
+        $this->formTabs[$name] = $options;
         return $this;
     }
 
@@ -107,7 +104,7 @@ class FormManager extends EventProvider
         $elementName = $tabName . '[' . $element->getName() . ']';
         $element->setName($elementName);
 
-        $this->formTabs[$tabName]['elements'][] = $element;
+        $this->formTabs[$tabName]['elements'][$element->getName()] = $element;
         return $this;
     }
 }

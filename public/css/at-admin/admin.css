@@ -28,5 +28,15 @@ h2, .h2 {
     font-size: 24px;
 }
 
+form h4 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.help-block ul li {
+    list-style: none;
+    margin-left: -40px;
+}
+
 /* Misc */
 .b {font-weight: bold}

@@ -10,6 +10,11 @@ use Zend\View\Model\ViewModel;
 
 abstract class AbstractCrudController extends AbstractActionController
 {
+    const EVENT_SAVE_PRE = 'at-admin.save.pre';
+    const EVENT_SAVE_POST = 'at-admin.save.post';
+    const EVENT_DELETE_PRE = 'at-admin.delete.pre';
+    const EVENT_DELETE_POST = 'at-admin.delete.post';
+
     /**
      * @var DataGrid
      */
@@ -26,7 +31,7 @@ abstract class AbstractCrudController extends AbstractActionController
     protected $formManager;
 
     /**
-     * @return array|ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -42,7 +47,7 @@ abstract class AbstractCrudController extends AbstractActionController
         $this->backTo()->setBackUrl();
 
         if (isset($_POST['cmd'])) {
-            $this->_forward($_POST['cmd']);    // @todo refactor this
+            $this->forward($_POST['cmd']);    // @todo refactor this
         }
 
         $grid = $this->getGrid();
@@ -61,7 +66,7 @@ abstract class AbstractCrudController extends AbstractActionController
         $filtersForm = $gridManager->getFiltersForm();
         $filtersForm->setData($this->request->getQuery());
         if (!$filtersForm->isValid()) {
-            //return $filtersForm->getMessages();
+            $this->flashMessenger()->addMessage($filtersForm->getMessages());
         }
 
         $grid->setFiltersData($filtersForm->getData());
@@ -78,25 +83,35 @@ abstract class AbstractCrudController extends AbstractActionController
     public function createAction()
     {
         $gridManager = $this->getGridManager();
+        $formManager = $this->getFormManager();
         $grid = $gridManager->getGrid();
 
         if (! $gridManager->isAllowCreate()) {
             throw new \Exception('Creating is disabled');
         }
 
-        $form = $this->getFormManager()->getForm($grid);
+        $form = $formManager->getForm($grid);
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
+
             if ($form->isValid()) {
-                $grid->save($form->getData());
-                $this->backTo()->previous('Record created');
+                try {
+                    $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $this->getRequest()->getPost());
+                    $grid->save($form->getData());
+                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $this->getRequest()->getPost());
+                    return $this->backTo()->previous('Record created');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addMessage($e->getMessage());
+                }
+            } else {
+                $this->flashMessenger()->addMessage($form->getMessages());
             }
         }
 
         $viewModel = new ViewModel(array(
-            'form' => $form,
-            'tabs' => $this->getFormManager()->getFormTabs(),
+            'form'    => $form,
+            'tabs'    => $formManager->getFormTabs(),
             'backUrl' => $this->backTo()->getBackUrl(false),
         ));
         $viewModel->setTemplate('at-admin/create.phtml');
@@ -127,7 +142,9 @@ abstract class AbstractCrudController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
+                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $this->getRequest()->getPost());
                 $grid->save($form->getData(), $itemId);
+                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $this->getRequest()->getPost());
                 $this->backTo()->previous('Record was updated');
             }
         }
@@ -138,6 +155,7 @@ abstract class AbstractCrudController extends AbstractActionController
         $viewModel = new ViewModel(array(
             'item'        => $item,
             'form'        => $form,
+            'tabs'        => $this->getFormManager()->getFormTabs(),
             'backUrl'     => $this->backTo()->getBackUrl(false),
         ));
         $viewModel->setTemplate('at-admin/edit.phtml');
@@ -162,13 +180,14 @@ abstract class AbstractCrudController extends AbstractActionController
             throw new \Exception('No record found.');
         }
 
+        $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, array($itemId));
         $grid->delete($itemId);
+        $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, array($itemId));
+
         $this->backTo()->previous('Record deleted.');
     }
 
-    abstract public function getFormManager();
-
-    abstract public function getGridManager();
-
     abstract public function getGrid();
+    abstract public function getGridManager();
+    abstract public function getFormManager();
 }
