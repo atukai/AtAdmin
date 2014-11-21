@@ -8,7 +8,7 @@ use AtDataGrid\Manager as GridManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-abstract class AbstractCrudController extends AbstractActionController
+abstract class AbstractAdminController extends AbstractActionController
 {
     const EVENT_SAVE_PRE = 'at-admin.save.pre';
     const EVENT_SAVE_POST = 'at-admin.save.post';
@@ -97,9 +97,14 @@ abstract class AbstractCrudController extends AbstractActionController
 
             if ($form->isValid()) {
                 try {
-                    $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $this->getRequest()->getPost());
-                    $grid->save($form->getData());
-                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $this->getRequest()->getPost());
+                    $data = $this->getRequest()->getPost();
+                    $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
+
+                    $id = $grid->save($form->getData());
+                    $data['__id'] = $id;
+
+                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $data);
+
                     return $this->backTo()->previous('Record created');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addMessage($e->getMessage());
@@ -142,9 +147,11 @@ abstract class AbstractCrudController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $this->getRequest()->getPost());
+                $data = $this->getRequest()->getPost();
+                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
                 $grid->save($form->getData(), $itemId);
-                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $this->getRequest()->getPost());
+                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $data);
+
                 $this->backTo()->previous('Record was updated');
             }
         }
