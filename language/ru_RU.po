@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AtDataGrid\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-29 18:32+0300\n"
-"PO-Revision-Date: 2014-10-29 18:32+0300\n"
+"POT-Creation-Date: 2014-11-21 18:10+0300\n"
+"PO-Revision-Date: 2014-11-21 18:10+0300\n"
 "Last-Translator: vragovR <vragovR@yandex.ru>\n"
 "Language-Team: Alexander Tukai <atukai@gmail.com>\n"
 "Language: en_US\n"
@@ -16,35 +16,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ..\n"
 
+#: ../view/at-admin/create.phtml:4
+msgid "Create"
+msgstr "Создать"
+
 #: ../view/at-admin/dashboard/index.phtml:1
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ../view/at-admin/settings/general.phtml:2
-msgid "Settings"
-msgstr "Настройки"
+#: ../view/at-admin/edit.phtml:4
+msgid "Edit"
+msgstr "Редактирование"
 
-#: ../view/at-admin/settings/general.phtml:2
-msgid "General"
-msgstr "Общие"
+#: ../view/at-admin/form.phtml:42 ../view/at-admin/form.phtml:43
+msgid "Back to list"
+msgstr "Назад к списку"
 
-#: ../view/layout/admin.phtml:57 ../view/layout/admin.phtml:63
-#: ../view/layout/admin.phtml:64
+#: ../view/layout/admin.phtml:59 ../view/layout/admin.phtml:65
+#: ../view/layout/admin.phtml:66
 msgid "Profile"
 msgstr "Профиль"
 
-#: ../view/layout/admin.phtml:69
+#: ../view/layout/admin.phtml:71
 msgid "Logout"
 msgstr "Выход"
 
-#~ msgid "Create"
-#~ msgstr "Создать"
+#~ msgid "Settings"
+#~ msgstr "Настройки"
+
+#~ msgid "General"
+#~ msgstr "Общие"
 
 #~ msgid "View & Edit"
 #~ msgstr "Просмотр и редактирование"
-
-#~ msgid "Back to list"
-#~ msgstr "Назад к списку"
 
 #~ msgid "Apply filters"
 #~ msgstr "Применить фильтры"

@@ -66,7 +66,7 @@ abstract class AbstractAdminController extends AbstractActionController
         $filtersForm = $gridManager->getFiltersForm();
         $filtersForm->setData($this->request->getQuery());
         if (!$filtersForm->isValid()) {
-            $this->flashMessenger()->addMessage($filtersForm->getMessages());
+            //$this->flashMessenger()->addMessage($filtersForm->getMessages());
         }
 
         $grid->setFiltersData($filtersForm->getData());
@@ -101,9 +101,11 @@ abstract class AbstractAdminController extends AbstractActionController
                     $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
 
                     $id = $grid->save($form->getData());
-                    $data['__id'] = $id;
 
-                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $data);
+                    // Replace POST data with filtered and validated from form
+                    $data = array_replace($data->toArray(), $form->getData());
+
+                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
 
                     return $this->backTo()->previous('Record created');
                 } catch (\Exception $e) {
@@ -137,8 +139,8 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Editing is disabled');
         }
 
-        $itemId = $this->params('id');
-        if (!$itemId) {
+        $id = $this->params('id');
+        if (!$id) {
             throw new \Exception('Record not found');
         }
 
@@ -148,15 +150,17 @@ abstract class AbstractAdminController extends AbstractActionController
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
                 $data = $this->getRequest()->getPost();
-                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
-                $grid->save($form->getData(), $itemId);
-                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, $data);
+                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $grid->getRow($id), $data);
+
+                $grid->save($form->getData(), $id);
+
+                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
 
                 $this->backTo()->previous('Record was updated');
             }
         }
 
-        $item = $grid->getRow($itemId);
+        $item = $grid->getRow($id);
         $form->setData($item);
 
         $viewModel = new ViewModel(array(
@@ -187,9 +191,9 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('No record found.');
         }
 
-        $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, array($itemId));
+        $this->getEventManager()->trigger(self::EVENT_DELETE_PRE, $this, array($itemId));
         $grid->delete($itemId);
-        $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $this, array($itemId));
+        $this->getEventManager()->trigger(self::EVENT_DELETE_POST, $this, array($itemId));
 
         $this->backTo()->previous('Record deleted.');
     }

@@ -9,7 +9,7 @@ use ZfcBase\EventManager\EventProvider;
 
 class FormManager extends EventProvider
 {
-    const EVENT_GRID_FORM_BUILD_POST = 'at-datagrid.grid.form.build.post';
+    const EVENT_GRID_FORM_BUILD_POST = 'at-admin.grid.form.build.post';
 
     /**
      * @var Form
