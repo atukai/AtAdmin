@@ -10,14 +10,15 @@
 
         <!-- Styles -->
         <?php echo $this->headLink()
-            ->appendStylesheet('https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css')
+            ->appendStylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+			->appendStylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
             ->appendStylesheet($this->basePath() . '/css/at-admin/admin.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()
+        <?php $this->headScript()
             ->appendFile('//code.jquery.com/jquery.min.js')
             ->appendFile('//html5shiv.googlecode.com/svn/trunk/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->appendFile('https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js') ?>
+            ->appendFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js') ?>
     </head>
 
     <body>
@@ -88,6 +89,8 @@
             </footer>
         </div>
 
+		<?php echo $this->headScript() ?>
         <?php echo $this->inlineScript() ?>
+		
     </body>
 </html>
