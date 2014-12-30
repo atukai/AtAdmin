@@ -9,12 +9,20 @@ use ZfcBase\EventManager\EventProvider;
 
 class FormManager extends EventProvider
 {
+    const FORM_CONTEXT_CREATE = 'create';
+    const FORM_CONTEXT_EDIT   = 'edit';
+
     const EVENT_GRID_FORM_BUILD_POST = 'at-admin.grid.form.build.post';
 
     /**
-     * @var Form
+     * @var array
      */
-    protected $form;
+    protected $forms = array();
+
+    /**
+     * @var DataGrid
+     */
+    protected $grid;
 
     /**
      * @var array
@@ -23,24 +31,16 @@ class FormManager extends EventProvider
 
     /**
      * @param DataGrid $grid
+     * @param string $context
      * @return Form
      */
-    public function getForm(DataGrid $grid)
+    public function buildFormFromGrid(DataGrid $grid, $context = self::FORM_CONTEXT_CREATE)
     {
-        if (!$this->form) {
-            $this->buildFormFromGrid($grid);
+        if (array_key_exists($context, $this->forms)) {
+            return $this->forms[$context];
         }
 
-        return $this->form;
-    }
-
-    /**
-     * @param DataGrid $grid
-     * @return Form
-     */
-    protected function buildFormFromGrid(DataGrid $grid)
-    {
-        $form = new Form('at-datagrid-form-create');
+        $form = new Form('at-datagrid-form');
 
         // Collect elements
         foreach ($grid->getColumns() as $column) {
@@ -68,11 +68,11 @@ class FormManager extends EventProvider
         $submit->setValue('Save');
         $form->add($submit);
 
-        $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form);
+        $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form, array('context' => $context));
 
-        $this->form = $form;
+        $this->forms[$context] = $form;
 
-        return $this->form;
+        return $form;
     }
 
     /**

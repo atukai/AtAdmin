@@ -90,7 +90,7 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Creating is disabled');
         }
 
-        $form = $formManager->getForm($grid);
+        $form = $formManager->buildFormFromGrid($grid);
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
@@ -144,7 +144,7 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Record not found');
         }
 
-        $form = $this->getFormManager()->getForm($grid);
+        $form = $this->getFormManager()->buildFormFromGrid($grid, FormManager::FORM_CONTEXT_EDIT);
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
