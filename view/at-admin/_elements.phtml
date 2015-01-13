@@ -1,0 +1,51 @@
+<?php foreach ($elements as $element): ?>
+    <?php if ($element->getAttribute('type') == 'hidden'): ?>
+        <?= $this->formHidden($element) ?>
+    <?php elseif ($element->getAttribute('type') == 'checkbox'): ?>
+        <div class="form-group">
+            <?php $element->setLabelAttributes(array('class' => 'control-label col-md-3')); ?>
+            <div class="col-md-7 col-sm-offset-3">
+                <div class="checkbox">
+                    <label>
+                        <?php echo $this->formElement($element) ?>
+                        <?php echo $element->getLabel() ?>
+                    </label>
+                </div>
+                <p class="help-block"><?php echo $this->formElementErrors($element); ?></p>
+            </div>
+        </div>
+    <?php elseif ($element->getAttribute('type') == 'multi_checkbox'): ?>
+        <div class="form-group">
+            <?php
+                $element->setLabelAttributes(array('class' => 'control-label col-md-3'));
+                /*$element->setAttributes(array('class' => 'form-control'));*/
+            ?>
+            <?php echo $this->formLabel($element) ?>
+            <div class="col-md-7">
+                <?php foreach ($element->getValueOptions() as $key => $value): ?>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="<?= $key ?>" name="<?= $element->getName()?>[]">
+                            <?= $value ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+				<p class="help-block"><?php echo $this->formElementErrors($element); ?></p>
+            </div>
+        </div>
+    <?php elseif ($element->getAttribute('type') != 'submit'): ?>
+        <div class="form-group">
+            <?php
+                $element->setLabelAttributes(array('class' => 'control-label col-md-3'));
+                $element->setAttributes(array('class' => 'form-control'));
+            ?>
+            <?php echo $this->formLabel($element) ?>
+            <div class="col-md-7">
+                <?php echo $this->formElement($element) ?>
+                <p class="help-block">
+                    <?php echo $this->formElementErrors($element); ?>
+                </p>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endforeach; ?>

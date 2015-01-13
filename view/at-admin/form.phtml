@@ -1,34 +1,26 @@
 <?php
+    $form = $this->form;
+    $form->prepare();
+    $form->setAttribute('action', $this->url(null, array(), array(), true));
+    $form->setAttribute('method', 'post');
+    $form->setAttribute('id', 'at-datagrid-form');
+    $form->setAttribute('role', 'form');
+    $form->setAttribute('class', 'form-horizontal');
 
-$form = $this->form;
-$form->prepare();
-$form->setAttribute('action', $this->url(null, array(), array(), true));
-$form->setAttribute('method', 'post');
-$form->setAttribute('id', 'datagrid-form');
-$form->setAttribute('role', 'form');
-$form->setAttribute('class', 'form-horizontal grid-form');
-
-echo $this->form()->openTag($form);
+    echo $this->form()->openTag($form);
 ?>
 
-<?php foreach ($form->getElements() as $element): ?>
-        <?php if ($element->getAttribute('type') == 'hidden'): ?>
-            <?php echo $this->formHidden($element) ?>
-        <?php elseif ($element->getAttribute('type') != 'submit'): ?>
-            <div class="form-group">
-                <?php
-                    $element->setLabelAttributes(array('class' => 'control-label col-md-3'));
-                    $element->setAttributes(array('class' => 'form-control'));
-                ?>
-                <?php echo $this->formLabel($element) ?>
-                <div class="col-md-7">
-                    <?php echo $this->formElement($element) ?>
-                    <p class="help-block">
-                        <?php echo $this->formElementErrors($element); ?>
-                    </p>
-                </div>
-            </div>
-        <?php endif; ?>
+<div>
+    <?= $this->render('at-admin/_elements.phtml', array('elements' => $form->getElements())) ?>
+</div>
+
+<?php foreach ($formSections as $section): ?>
+
+    <h4><?= $this->translate($section['label']); ?></h4>
+
+    <div>
+        <?= $this->render('at-admin/_elements.phtml', array('elements' => $section['elements'])) ?>
+    </div>
 <?php endforeach; ?>
 
 <div class="form-group">
@@ -36,10 +28,9 @@ echo $this->form()->openTag($form);
         <?php
             $submit = $form->get('submit');
             $submit->setAttributes(array('class' => 'btn btn-info pull-left'));
-           //$submit->setValue($this->submitLabel);
         ?>
         <?php echo $this->formSubmit($submit) ?>
-        <a class="pull-right" href="<?php echo $this->backUrl ?>" title="<?php echo $this->translate('Back to list'); ?>">
+        <a class="pull-right" href="<?php echo $this->backUrl ?>">
             <?php echo $this->translate('Back to list'); ?>
         </a>
     </div>

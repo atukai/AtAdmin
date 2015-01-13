@@ -9,6 +9,8 @@ use ZfcBase\EventManager\EventProvider;
 
 class FormManager extends EventProvider
 {
+    const FORM_CONTEXT_PARAM_NAME = '__context';
+
     const FORM_CONTEXT_CREATE = 'create';
     const FORM_CONTEXT_EDIT   = 'edit';
 
@@ -27,14 +29,14 @@ class FormManager extends EventProvider
     /**
      * @var array
      */
-    protected $formTabs = array();
+    protected $formSections = array();
 
     /**
      * @param DataGrid $grid
      * @param string $context
      * @return Form
      */
-    public function buildFormFromGrid(DataGrid $grid, $context = self::FORM_CONTEXT_CREATE)
+    public function buildFormFromGrid(DataGrid $grid, $context = self::FORM_CONTEXT_CREATE, $data = array())
     {
         if (array_key_exists($context, $this->forms)) {
             return $this->forms[$context];
@@ -68,7 +70,14 @@ class FormManager extends EventProvider
         $submit->setValue('Save');
         $form->add($submit);
 
-        $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form, array('context' => $context));
+        $data[self::FORM_CONTEXT_PARAM_NAME] = $context;
+
+        $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form, $data);
+
+        // Set data to form
+        if ($data) {
+            $form->setData($data);
+        }
 
         $this->forms[$context] = $form;
 
@@ -78,9 +87,9 @@ class FormManager extends EventProvider
     /**
      * @return array
      */
-    public function getFormTabs()
+    public function getFormSections()
     {
-        return $this->formTabs;
+        return $this->formSections;
     }
 
     /**
@@ -88,23 +97,28 @@ class FormManager extends EventProvider
      * @param $options
      * @return $this
      */
-    public function addFormTab($name, $options)
+    public function addFormSection($name, $options)
     {
-        $this->formTabs[$name] = $options;
+        $this->formSections[$name] = $options;
         return $this;
     }
 
     /**
-     * @param $tabName
+     * @param $sectionName
      * @param $element
      * @return $this
+     * @throws \Exception
      */
-    public function addFormTabElement($tabName, $element)
+    public function addFormSectionElement($sectionName, $element)
     {
-        $elementName = $tabName . '[' . $element->getName() . ']';
+        if (! array_key_exists($sectionName, $this->formSections)) {
+            throw new \Exception('No tab with name "'. $sectionName .'"');
+        }
+
+        $elementName = $sectionName . '[' . $element->getName() . ']';
         $element->setName($elementName);
 
-        $this->formTabs[$tabName]['elements'][$element->getName()] = $element;
+        $this->formSections[$sectionName]['elements'][$element->getName()] = $element;
         return $this;
     }
 }

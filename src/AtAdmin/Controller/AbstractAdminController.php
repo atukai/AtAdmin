@@ -5,8 +5,10 @@ namespace AtAdmin\Controller;
 use AtAdmin\Form\FormManager;
 use AtDataGrid\DataGrid;
 use AtDataGrid\Manager as GridManager;
+use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 abstract class AbstractAdminController extends AbstractActionController
 {
@@ -46,6 +48,7 @@ abstract class AbstractAdminController extends AbstractActionController
         // Save back url to redirect after actions
         $this->backTo()->setBackUrl();
 
+        // Check for mass actions
         if (isset($_POST['cmd'])) {
             $this->forward($_POST['cmd']);    // @todo refactor this
         }
@@ -102,7 +105,7 @@ abstract class AbstractAdminController extends AbstractActionController
 
                     $id = $grid->save($form->getData());
 
-                    // Replace POST data with filtered and validated from form
+                    // Replace POST data with filtered and validated form values
                     $data = array_replace($data->toArray(), $form->getData());
 
                     $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
@@ -117,9 +120,9 @@ abstract class AbstractAdminController extends AbstractActionController
         }
 
         $viewModel = new ViewModel(array(
-            'form'    => $form,
-            'tabs'    => $formManager->getFormTabs(),
-            'backUrl' => $this->backTo()->getBackUrl(false),
+            'form'         => $form,
+            'formSections' => $formManager->getFormSections(),
+            'backUrl'      => $this->backTo()->getBackUrl(false),
         ));
         $viewModel->setTemplate('at-admin/create.phtml');
 
@@ -144,7 +147,13 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Record not found');
         }
 
-        $form = $this->getFormManager()->buildFormFromGrid($grid, FormManager::FORM_CONTEXT_EDIT);
+        $item = $grid->getRow($id);
+        if (!$item) {
+            throw new \Exception('Record not found');
+        }
+
+        /** @var Form $form */
+        $form = $this->getFormManager()->buildFormFromGrid($grid, FormManager::FORM_CONTEXT_EDIT, $item);
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
@@ -154,20 +163,20 @@ abstract class AbstractAdminController extends AbstractActionController
 
                 $grid->save($form->getData(), $id);
 
+                // Replace POST data with filtered and validated form values
+                $data = array_replace($data->toArray(), $form->getData());
+
                 $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
 
                 $this->backTo()->previous('Record was updated');
             }
         }
 
-        $item = $grid->getRow($id);
-        $form->setData($item);
-
         $viewModel = new ViewModel(array(
-            'item'        => $item,
-            'form'        => $form,
-            'tabs'        => $this->getFormManager()->getFormTabs(),
-            'backUrl'     => $this->backTo()->getBackUrl(false),
+            'item'         => $item,
+            'form'         => $form,
+            'formSections' => $this->getFormManager()->getFormSections(),
+            'backUrl'      => $this->backTo()->getBackUrl(false),
         ));
         $viewModel->setTemplate('at-admin/edit.phtml');
 
@@ -186,14 +195,19 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Deleting is disabled.');
         }
 
-        $itemId = $this->params('id');
-        if (!$itemId) {
-            throw new \Exception('No record found.');
+        $id = $this->params('id');
+        if (!$id) {
+            throw new \Exception('Record not found');
         }
 
-        $this->getEventManager()->trigger(self::EVENT_DELETE_PRE, $this, array($itemId));
-        $grid->delete($itemId);
-        $this->getEventManager()->trigger(self::EVENT_DELETE_POST, $this, array($itemId));
+        $item = $grid->getRow($id);
+        if (!$item) {
+            throw new \Exception('Record not found');
+        }
+
+        $this->getEventManager()->trigger(self::EVENT_DELETE_PRE, $this, array('item' => $item));
+        $grid->delete($id);
+        $this->getEventManager()->trigger(self::EVENT_DELETE_POST, $this, array('item' => $item));
 
         $this->backTo()->previous('Record deleted.');
     }
