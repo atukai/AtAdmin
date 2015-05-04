@@ -1,4 +1,4 @@
-# AtAdmin [1.0.0-dev]
+# AtAdmin [0.5.0-dev]
 
 The missing ZF2 Admin module constructor.
 
@@ -7,14 +7,14 @@ The missing ZF2 Admin module constructor.
 ## Requirements
 
 * [Zend Framework 2](https://github.com/zendframework/zf2)
-* [ZfcBase](https://github.com/zf-commons/ZfcBase)
 * [AtBase](https://github.com/atukai/AtBase)
 * [AtDataGrid](https://github.com/atukai/AtDataGrid)
 * [Bootstrap](http://getbootstrap.com/)
 
 ## Features
 
-* Theme based on [Twitter Bootstrap](http://getbootstrap.com/)
+* Theme based on [Twitter Bootstrap](http://getbootstrap.com)
+* Additional [Font Awesome](http://fortawesome.github.io/Font-Awesome) icons
 * Integration with [AtDataGrid](https://github.com/atukai/AtDataGrid) for data grids generation
 
 ## Installation

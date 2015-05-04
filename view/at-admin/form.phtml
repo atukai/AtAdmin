@@ -1,7 +1,8 @@
 <?php
+    /** @var \Zend\Form\Form $form */
     $form = $this->form;
     $form->prepare();
-    $form->setAttribute('action', $this->url(null, array(), array(), true));
+    $form->setAttribute('action', $this->url(null, [], [], true));
     $form->setAttribute('method', 'post');
     $form->setAttribute('id', 'at-datagrid-form');
     $form->setAttribute('role', 'form');
@@ -10,30 +11,25 @@
     echo $this->form()->openTag($form);
 ?>
 
-<div>
-    <?= $this->render('at-admin/_elements.phtml', array('elements' => $form->getElements())) ?>
+<div id="section-general">
+    <?= $this->render('at-admin/_elements.phtml', ['elements' => $form->getElements()]) ?>
 </div>
 
-<?php foreach ($formSections as $section): ?>
-
-    <h4><?= $this->translate($section['label']); ?></h4>
-
-    <div>
-        <?= $this->render('at-admin/_elements.phtml', array('elements' => $section['elements'])) ?>
+<?php foreach ($form->getFieldSets() as $fieldset): ?>
+    <div id="section-<?= $fieldset->getName() ?>">
+        <h4><?= $this->translate($fieldset->getLabel()); ?></h4>
+        <?= $this->render('at-admin/_elements.phtml', ['elements' => $fieldset->getElements()]) ?>
     </div>
 <?php endforeach; ?>
 
 <div class="form-group">
-    <div class="col-md-offset-3 col-md-7">
+    <div class="col-md-6 col-md-offset-3">
         <?php
             $submit = $form->get('submit');
-            $submit->setAttributes(array('class' => 'btn btn-info pull-left'));
+            $submit->setAttributes(['class' => 'btn btn-info pull-left']);
         ?>
-        <?php echo $this->formSubmit($submit) ?>
-        <a class="pull-right" href="<?php echo $this->backUrl ?>">
-            <?php echo $this->translate('Back to list'); ?>
-        </a>
+        <?= $this->formSubmit($submit) ?>
     </div>
 </div>
 
-<?php echo $this->form()->closeTag(); ?>
+<?= $this->form()->closeTag(); ?>

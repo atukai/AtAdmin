@@ -8,7 +8,6 @@ use AtDataGrid\Manager as GridManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
 
 abstract class AbstractAdminController extends AbstractActionController
 {
@@ -16,6 +15,10 @@ abstract class AbstractAdminController extends AbstractActionController
     const EVENT_SAVE_POST = 'at-admin.save.post';
     const EVENT_DELETE_PRE = 'at-admin.delete.pre';
     const EVENT_DELETE_POST = 'at-admin.delete.post';
+    const EVENT_CHECK_PERMISSIONS_LIST = 'at-admin.check-permissions.list';
+    const EVENT_CHECK_PERMISSIONS_CREATE = 'at-admin.check-permissions.create';
+    const EVENT_CHECK_PERMISSIONS_EDIT = 'at-admin.check-permissions.edit';
+    const EVENT_CHECK_PERMISSIONS_DELETE = 'at-admin.check-permissions.delete';
 
     /**
      * @var DataGrid
@@ -33,18 +36,12 @@ abstract class AbstractAdminController extends AbstractActionController
     protected $formManager;
 
     /**
-     * @return ViewModel
-     */
-    public function indexAction()
-    {
-        return new ViewModel();
-    }
-
-    /**
      * @return mixed
      */
     public function listAction()
     {
+        $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_LIST, $this);
+
         // Save back url to redirect after actions
         $this->backTo()->setBackUrl();
 
@@ -85,6 +82,8 @@ abstract class AbstractAdminController extends AbstractActionController
      */
     public function createAction()
     {
+        $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_CREATE, $this);
+
         $gridManager = $this->getGridManager();
         $formManager = $this->getFormManager();
         $grid = $gridManager->getGrid();
@@ -99,23 +98,19 @@ abstract class AbstractAdminController extends AbstractActionController
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-                try {
-                    $data = $this->getRequest()->getPost();
-                    $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
+                $data = $this->getRequest()->getPost();
+                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
 
-                    $id = $grid->save($form->getData());
+                // Replace POST data with filtered and validated form values
+                // POST data may contains not only form data
+                $data = array_replace($data->toArray(), $form->getData());
+                $id = $grid->save($data);
 
-                    // Replace POST data with filtered and validated form values
-                    $data = array_replace($data->toArray(), $form->getData());
+                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
 
-                    $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
-
-                    return $this->backTo()->previous('Record created');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addMessage($e->getMessage());
-                }
+                return $this->backTo()->previous('Record created');
             } else {
-                $this->flashMessenger()->addMessage($form->getMessages());
+                $this->flashMessenger()->addMessage('Check form data');
             }
         }
 
@@ -152,6 +147,8 @@ abstract class AbstractAdminController extends AbstractActionController
             throw new \Exception('Record not found');
         }
 
+        $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_EDIT, $this, ['id' => $id]);
+
         /** @var Form $form */
         $form = $this->getFormManager()->buildFormFromGrid($grid, FormManager::FORM_CONTEXT_EDIT, $item);
 
@@ -169,6 +166,8 @@ abstract class AbstractAdminController extends AbstractActionController
                 $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
 
                 $this->backTo()->previous('Record was updated');
+            } else {
+                $this->flashMessenger()->addMessage('Check form data');
             }
         }
 
@@ -199,6 +198,8 @@ abstract class AbstractAdminController extends AbstractActionController
         if (!$id) {
             throw new \Exception('Record not found');
         }
+
+        $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_DELETE, $this, ['id' => $id]);
 
         $item = $grid->getRow($id);
         if (!$item) {

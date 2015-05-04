@@ -1,10 +1,15 @@
 <?php $this->headScript()->appendFile('/js/at-datagrid/datagrid.js') ?>
 <?php $this->headLink()->appendStylesheet('/css/at-datagrid/datagrid.css') ?>
 
-<h1 class="page-header"><?php echo $this->translate('Create') ?></h1>
+<div class="page-header clearfix">
+    <h1><?php echo $this->translate('Create') ?></h1>
+</div>
 
 <div class="row">
-    <div class="col-md-10 col-md-offset-2">
+    <div class="col-md-12">
+        <a class="pull-right" href="<?php echo $this->backUrl ?>">
+            &leftarrow; <?php echo $this->translate('Back'); ?>
+        </a>
         <?php echo $this->render('at-admin/form.phtml'); ?>
     </div>
 </div>

@@ -39,5 +39,9 @@ form h4 {
     margin-left: -40px;
 }
 
+.alert ul li {
+    list-style: none;
+}
+
 /* Misc */
 .b {font-weight: bold}

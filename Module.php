@@ -15,13 +15,13 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -29,58 +29,35 @@ class Module
      */
     public function getControllerConfig()
     {
-        return array(
-            'invokables' => array(
+        return [
+            'invokables' => [
                 'AtAdmin\Controller\Dashboard'              => 'AtAdmin\Controller\DashboardController',
                 'AtAdmin\Controller\AbstractCrudController' => 'AtDataGrid\Controller\AbstractCrudController'
-            ),
-        );
+            ],
+        ];
     }
 
     /**
-     * @return array
+     * @param MvcEvent $e
      */
-    public function getServiceConfig()
+    public function onBootstrap(MvcEvent $e)
     {
-        return array(
-            'factories' => array(
-            ),
-        );
-    }
+        $app = $e->getApplication();
+        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function (MvcEvent $e) {
+            $app    = $e->getApplication();
+            $config = $app->getServiceManager()->get('config');
 
-    /**
-     * @{inheritdoc}
-     */
-    public function onBootstrap(EventInterface $e)
-    {
-        $app = $e->getParam('application');
-        $em  = $app->getEventManager();
+            $match      = $e->getRouteMatch();
+            $controller = $e->getTarget();
+            if (!$match instanceof RouteMatch
+                || 0 !== strpos($match->getMatchedRouteName(), 'at-admin')
+                || $controller->getEvent()->getResult()->terminate()
+            ) {
+                return;
+            }
 
-        $em->attach(MvcEvent::EVENT_DISPATCH, array($this, 'selectLayoutBasedOnRoute'));
-    }
-
-    /**
-     * Select the admin layout based on route name
-     *
-     * @param  MvcEvent $e
-     * @return void
-     */
-    public function selectLayoutBasedOnRoute(MvcEvent $e)
-    {
-        $app    = $e->getParam('application');
-        $sm     = $app->getServiceManager();
-        $config = $sm->get('config');
-
-        $match      = $e->getRouteMatch();
-        $controller = $e->getTarget();
-        if (!$match instanceof RouteMatch
-            || 0 !== strpos($match->getMatchedRouteName(), 'at-admin')
-            || $controller->getEvent()->getResult()->terminate()
-        ) {
-            return;
-        }
-
-        $layout = $config['at-admin']['admin_layout'];
-        $controller->layout($layout);
+            $layout = $config['at-admin']['admin_layout'];
+            $controller->layout($layout);
+        });
     }
 }

@@ -3,17 +3,21 @@
 namespace AtAdmin\Form;
 
 use AtDataGrid\DataGrid;
+use Zend\EventManager\EventManagerAwareTrait;
+use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\Form\Element;
-use ZfcBase\EventManager\EventProvider;
 
-class FormManager extends EventProvider
+class FormManager
 {
+    use EventManagerAwareTrait;
+
     const FORM_CONTEXT_PARAM_NAME = '__context';
 
     const FORM_CONTEXT_CREATE = 'create';
     const FORM_CONTEXT_EDIT   = 'edit';
 
+    const EVENT_GRID_FORM_BUILD_PRE = 'at-admin.grid.form.build.pre';
     const EVENT_GRID_FORM_BUILD_POST = 'at-admin.grid.form.build.post';
 
     /**
@@ -34,13 +38,17 @@ class FormManager extends EventProvider
     /**
      * @param DataGrid $grid
      * @param string $context
+     * @param array $data
      * @return Form
      */
-    public function buildFormFromGrid(DataGrid $grid, $context = self::FORM_CONTEXT_CREATE, $data = array())
+    public function buildFormFromGrid(DataGrid $grid, $context = self::FORM_CONTEXT_CREATE, $data = [])
     {
         if (array_key_exists($context, $this->forms)) {
             return $this->forms[$context];
         }
+
+        $data[self::FORM_CONTEXT_PARAM_NAME] = $context;
+        $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_PRE, null, $data);
 
         $form = new Form('at-datagrid-form');
 
@@ -65,12 +73,21 @@ class FormManager extends EventProvider
         $csrf = new Element\Csrf('hash');
         $form->add($csrf);
 
+        // Add section elements
+        $formSections = $this->getFormSections();
+
+        foreach ($formSections as $name => $section) {
+            $fieldsSet = new Fieldset($name, ['label' => $section['label']]);
+            foreach ($section['elements'] as $element) {
+                $fieldsSet->add($element);
+            }
+            $form->add($fieldsSet);
+        }
+
         // Submit button
         $submit = new Element\Submit('submit');
         $submit->setValue('Save');
         $form->add($submit);
-
-        $data[self::FORM_CONTEXT_PARAM_NAME] = $context;
 
         $this->getEventManager()->trigger(self::EVENT_GRID_FORM_BUILD_POST, $form, $data);
 
@@ -104,6 +121,32 @@ class FormManager extends EventProvider
     }
 
     /**
+     * @param $name
+     * @return $this
+     */
+    public function removeFormSection($name)
+    {
+        if (isset($this->formSections[$name])) {
+            unset($this->formSections[$name]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @return $this
+     */
+    public function clearFormSectionElements($name)
+    {
+        if (isset($this->formSections[$name])) {
+            $this->formSections[$name]['elements'] = [];
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $sectionName
      * @param $element
      * @return $this
@@ -115,8 +158,8 @@ class FormManager extends EventProvider
             throw new \Exception('No tab with name "'. $sectionName .'"');
         }
 
-        $elementName = $sectionName . '[' . $element->getName() . ']';
-        $element->setName($elementName);
+        //$elementName = $sectionName . '[' . $element->getName() . ']';
+        //$element->setName($elementName);
 
         $this->formSections[$sectionName]['elements'][$element->getName()] = $element;
         return $this;
