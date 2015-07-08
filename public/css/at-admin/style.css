@@ -22,16 +22,15 @@ footer {
 
 h1, .h1 {
     font-size: 32px;
+    color: #676056;
 }
 
 h2, .h2 {
     font-size: 24px;
 }
 
-form h4 {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    color: #00897B;
+h3, .h3 {
+    font-size: 20px;
 }
 
 .help-block ul li {
@@ -41,6 +40,12 @@ form h4 {
 
 .alert ul li {
     list-style: none;
+}
+
+label span.required {
+    color: #e51c23;
+    position: absolute;
+    right: 4px;
 }
 
 /* Misc */

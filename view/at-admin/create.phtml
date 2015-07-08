@@ -2,14 +2,20 @@
 <?php $this->headLink()->appendStylesheet('/css/at-datagrid/datagrid.css') ?>
 
 <div class="page-header clearfix">
-    <h1><?php echo $this->translate('Create') ?></h1>
+    <h1><?php echo $this->translate($this->title) ?></h1>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <a class="pull-right" href="<?php echo $this->backUrl ?>">
-            &leftarrow; <?php echo $this->translate('Back'); ?>
-        </a>
-        <?php echo $this->render('at-admin/form.phtml'); ?>
+        <div class="clearfix">
+            <a class="pull-right" href="<?php echo $this->backUrl ?>">
+                &leftarrow; <?php echo $this->translate('Back'); ?>
+            </a>
+        </div>
+        <?php if (count($form->getFieldSets()) > 0): ?>
+            <?php echo $this->render('at-datagrid/form/form-tabbed.phtml'); ?>
+        <?php else: ?>
+            <?php echo $this->render('at-datagrid/form/form-plain.phtml'); ?>
+        <?php endif; ?>
     </div>
 </div>
