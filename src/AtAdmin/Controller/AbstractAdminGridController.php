@@ -5,17 +5,18 @@ namespace AtAdmin\Controller;
 use AtDataGrid\DataGrid;
 use AtDataGrid\Form\FormBuilder;
 use AtDataGrid\Manager as GridManager;
+use Zend\EventManager\EventManager;
 use Zend\Form\Form;
+use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
 
 abstract class AbstractAdminGridController extends AbstractAdminController
 {
+    // Events
     const EVENT_CHECK_PERMISSIONS_LIST   = 'at-admin.check-permissions.list';
     const EVENT_CHECK_PERMISSIONS_CREATE = 'at-admin.check-permissions.create';
     const EVENT_CHECK_PERMISSIONS_EDIT   = 'at-admin.check-permissions.edit';
-    const EVENT_CHECK_PERMISSIONS_DELETE = 'at-admin.check-permissions.delete';
 
-    const EVENT_FORM_VALIDATION_PRE      = 'at-admin.form.validation.pre';
     const EVENT_SAVE_PRE                 = 'at-admin.save.pre';
     const EVENT_SAVE_POST                = 'at-admin.save.post';
     const EVENT_DELETE_PRE               = 'at-admin.delete.pre';
@@ -24,6 +25,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     const EVENT_SET_TEMPLATE_CREATE      = 'at-admin.set-template.create';
     const EVENT_SET_TEMPLATE_EDIT        = 'at-admin.set-template.edit';
 
+    // Page titles
     const TITLE_ACTION_LIST              = '';
     const TITLE_ACTION_CREATE            = 'Create';
     const TITLE_ACTION_EDIT              = 'Edit';
@@ -44,6 +46,9 @@ abstract class AbstractAdminGridController extends AbstractAdminController
      */
     protected $formManager;
 
+    /**
+     * @return array
+     */
     public function indexAction()
     {
         return $this->notFoundAction();
@@ -99,36 +104,34 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         /** @var GridManager $gridManager */
         $gridManager = $this->getGridManager();
 
+        /** @var EventManager $eventManager */
+        $eventManager = $this->getEventManager();
+
+        if (! $gridManager->isAllowCreate()) {
+            throw new \Exception('Creating is disabled');
+        }
+
         /** @var FormBuilder $formManager */
         $formManager = $this->getFormManager();
 
         /** @var DataGrid $grid */
         $grid = $gridManager->getGrid();
 
-        if (! $gridManager->isAllowCreate()) {
-            throw new \Exception('Creating is disabled');
-        }
-
         /** @var Form $form */
         $form = $formManager->build($grid);
 
         if ($this->getRequest()->isPost()) {
-            $form->setData($this->getRequest()->getPost());
-
-            $this->getEventManager()->trigger(self::EVENT_FORM_VALIDATION_PRE, $form);
+            $post = $this->getRequest()->getPost();
+            $form->setData($post);
 
             if ($form->isValid()) {
-                $data = $this->getRequest()->getPost();
-
-                $this->getEventManager()->trigger(self::EVENT_SAVE_PRE, $this, $data);
-
                 // Replace POST data with filtered and validated form values
                 // POST data may contains not only form data
-                $data = array_replace($data->toArray(), $form->getData());
+                $data = array_replace($post->toArray(), $form->getData());
 
-                $id = $grid->save($data);
-
-                $this->getEventManager()->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
+                $eventManager->trigger(self::EVENT_SAVE_PRE, null, $data);
+                $item = $grid->save($data);
+                $eventManager->trigger(self::EVENT_SAVE_POST, $item, $data);
 
                 return $this->backTo()->previous('Record created');
             } else {
@@ -144,7 +147,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         ]);
 
         $viewModel->setTemplate('at-admin/create.phtml');
-        $eventResult = $this->getEventManager()->trigger(self::EVENT_SET_TEMPLATE_CREATE, $viewModel)->last();
+        $eventResult = $eventManager->trigger(self::EVENT_SET_TEMPLATE_CREATE, $viewModel)->last();
         if ($eventResult) {
             $viewModel = $eventResult;
         }
@@ -166,17 +169,17 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $grid = $gridManager->getGrid();
 
         if (!$gridManager->isAllowEdit()) {
-            throw new \Exception('Updating is disabled');
+            throw new \Exception('Editing is disabled');
         }
 
         $id = $this->params($grid->getIdentifierColumnName());
         if (!$id) {
-            throw new \Exception('Record not found');
+            return $this->notFoundAction();
         }
 
         $item = $grid->getRow($id);
         if (!$item) {
-            throw new \Exception('Record not found');
+            return $this->notFoundAction();
         }
 
         $eventManager->trigger(self::EVENT_CHECK_PERMISSIONS_EDIT, $item);
@@ -185,20 +188,17 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $form = $formManager->build($grid, FormBuilder::FORM_CONTEXT_EDIT, $item);
 
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $form->setData($data);
+            $post = $this->getRequest()->getPost();
+            $form->setData($post);
 
-            $eventManager->trigger(self::EVENT_FORM_VALIDATION_PRE, $form);
-
-            if ($form->isValid()) {
-                $eventManager->trigger(self::EVENT_SAVE_PRE, $item, $data);
-
-                $grid->save($form->getData(), $id);
-
+            if ($form->setValid()) {
                 // Replace POST data with filtered and validated form values
-                $data = array_replace($data->toArray(), $form->getData());
+                // POST data may contains not only form data
+                $data = array_replace($post->toArray(), $form->getData());
 
-                $eventManager->trigger(self::EVENT_SAVE_POST, $grid->getRow($id), $data);
+                $eventManager->trigger(self::EVENT_SAVE_PRE, $item, $data);
+                $item = $grid->save($data, $id);
+                $eventManager->trigger(self::EVENT_SAVE_POST, $item, $data);
 
                 $this->backTo()->previous('Record was updated');
             } else {
@@ -215,7 +215,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         ]);
 
         $viewModel->setTemplate('at-admin/edit.phtml');
-        $eventResult = $this->getEventManager()->trigger(self::EVENT_SET_TEMPLATE_EDIT, $viewModel, $item)->last();
+        $eventResult = $this->getEventManager()->trigger(self::EVENT_SET_TEMPLATE_EDIT, $viewModel, ['item' => $item])->last();
         if ($eventResult) {
             $viewModel = $eventResult;
         }
@@ -229,8 +229,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     public function deleteAction()
     {
         $gridManager = $this->getGridManager();
-        $grid = $gridManager->getGrid();
-
         if (!$gridManager->isAllowDelete()) {
             throw new \Exception('Deleting is disabled.');
         }
@@ -240,20 +238,22 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             return $this->notFoundAction();
         }
 
+        $grid = $gridManager->getGrid();
         $item = $grid->getRow($id);
         if (!$item) {
             return $this->notFoundAction();
         }
 
         $evm = $this->getEventManager();
+        // Get additional params
+        $params = array_merge_recursive(
+            $this->params()->fromQuery(),
+            $this->params()->fromPost()
+        );
 
-        $evm->trigger(self::EVENT_CHECK_PERMISSIONS_DELETE, $item);
-
-        $evm->trigger(self::EVENT_DELETE_PRE, $item);
-
+        $evm->trigger(self::EVENT_DELETE_PRE, $item, $params);
         $grid->delete($id);
-
-        $evm->trigger(self::EVENT_DELETE_POST, $item);
+        $evm->trigger(self::EVENT_DELETE_POST, $item, $params);
 
         $this->backTo()->previous('Record deleted.');
     }
