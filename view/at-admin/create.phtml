@@ -7,11 +7,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="clearfix">
-            <a class="pull-right" href="<?php echo $this->backUrl ?>">
-                &leftarrow; <?php echo $this->translate('Back'); ?>
-            </a>
-        </div>
         <?php if (count($form->getFieldSets()) > 0): ?>
             <?php echo $this->render('at-datagrid/form/form-tabbed.phtml'); ?>
         <?php else: ?>

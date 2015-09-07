@@ -191,7 +191,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             $post = $this->getRequest()->getPost();
             $form->setData($post);
 
-            if ($form->setValid()) {
+            if ($form->isValid()) {
                 // Replace POST data with filtered and validated form values
                 // POST data may contains not only form data
                 $data = array_replace($post->toArray(), $form->getData());
