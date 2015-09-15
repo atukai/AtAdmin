@@ -16,6 +16,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     const EVENT_CHECK_PERMISSIONS_LIST   = 'at-admin.check-permissions.list';
     const EVENT_CHECK_PERMISSIONS_CREATE = 'at-admin.check-permissions.create';
     const EVENT_CHECK_PERMISSIONS_EDIT   = 'at-admin.check-permissions.edit';
+    const EVENT_CHECK_PERMISSIONS_DELETE = 'at-admin.check-permissions.delete';
 
     const EVENT_SAVE_PRE                 = 'at-admin.save.pre';
     const EVENT_SAVE_POST                = 'at-admin.save.post';
@@ -99,13 +100,13 @@ abstract class AbstractAdminGridController extends AbstractAdminController
      */
     public function createAction()
     {
+        /** @var EventManager $eventManager */
+        $eventManager = $this->getEventManager();
+
         $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_CREATE, $this);
 
         /** @var GridManager $gridManager */
         $gridManager = $this->getGridManager();
-
-        /** @var EventManager $eventManager */
-        $eventManager = $this->getEventManager();
 
         if (! $gridManager->isAllowCreate()) {
             throw new \Exception('Creating is disabled');
@@ -162,8 +163,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     public function editAction()
     {
         $gridManager = $this->getGridManager();
-        $formManager = $this->getFormManager();
-        $eventManager = $this->getEventManager();
 
         /** @var DataGrid $grid */
         $grid = $gridManager->getGrid();
@@ -182,7 +181,11 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             return $this->notFoundAction();
         }
 
+        /** @var EventManager $eventManager */
+        $eventManager = $this->getEventManager();
         $eventManager->trigger(self::EVENT_CHECK_PERMISSIONS_EDIT, $item);
+
+        $formManager = $this->getFormManager();
 
         /** @var Form $form */
         $form = $formManager->build($grid, FormBuilder::FORM_CONTEXT_EDIT, $item);
@@ -245,6 +248,8 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         }
 
         $evm = $this->getEventManager();
+        $evm->trigger(self::EVENT_CHECK_PERMISSIONS_DELETE, $item);
+
         // Get additional params
         $params = array_merge_recursive(
             $this->params()->fromQuery(),
