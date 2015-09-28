@@ -143,6 +143,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $viewModel = new ViewModel([
             'title'        => static::TITLE_ACTION_CREATE,
             'form'         => $form,
+            'customJs'     => $formManager->getCustomJs(),
             'formSections' => $formManager->getFormSections(),
             'backUrl'      => $this->backTo()->getBackUrl(false),
         ]);
@@ -213,6 +214,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             'title'        => static::TITLE_ACTION_EDIT,
             'item'         => $item,
             'form'         => $form,
+            'customJs'     => $formManager->getCustomJs(),
             'formSections' => $this->getFormManager()->getFormSections(),
             'backUrl'      => $this->backTo()->getBackUrl(false),
         ]);

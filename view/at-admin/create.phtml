@@ -1,6 +1,12 @@
 <?php $this->headScript()->appendFile('/js/at-datagrid/datagrid.js') ?>
 <?php $this->headLink()->appendStylesheet('/css/at-datagrid/datagrid.css') ?>
 
+<? if ($this->customJs): ?>
+    <?php foreach ($this->customJs as $file): ?>
+        <?php $this->headScript()->appendFile($file) ?>
+    <?php endforeach; ?>
+<? endif; ?>
+
 <div class="page-header clearfix">
     <h1><?php echo $this->translate($this->title) ?></h1>
 </div>
