@@ -5,6 +5,7 @@ namespace AtAdmin\Controller;
 use AtDataGrid\DataGrid;
 use AtDataGrid\Form\FormBuilder;
 use AtDataGrid\Manager as GridManager;
+use AtDataGrid\Manager;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Stdlib\ArrayUtils;
@@ -41,19 +42,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
      * @var GridManager
      */
     protected $gridManager;
-
-    /**
-     * @var FormBuilder
-     */
-    protected $formManager;
-
-    /**
-     * @return array
-     */
-    public function indexAction()
-    {
-        return $this->notFoundAction();
-    }
 
     /**
      * @return mixed
@@ -113,13 +101,13 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         }
 
         /** @var FormBuilder $formManager */
-        $formManager = $this->getFormManager();
+        $formBuilder = $gridManager->getFormBuilder();
 
         /** @var DataGrid $grid */
         $grid = $gridManager->getGrid();
 
         /** @var Form $form */
-        $form = $formManager->build($grid);
+        $form = $formBuilder->build($grid);
 
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
@@ -143,8 +131,8 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $viewModel = new ViewModel([
             'title'        => static::TITLE_ACTION_CREATE,
             'form'         => $form,
-            'customJs'     => $formManager->getCustomJs(),
-            'formSections' => $formManager->getFormSections(),
+            'customJs'     => $formBuilder->getCustomJs(),
+            'formSections' => $formBuilder->getFormSections(),
             'backUrl'      => $this->backTo()->getBackUrl(false),
         ]);
 
@@ -163,6 +151,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
      */
     public function editAction()
     {
+        /** @var Manager $gridManager */
         $gridManager = $this->getGridManager();
 
         /** @var DataGrid $grid */
@@ -186,10 +175,11 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $eventManager = $this->getEventManager();
         $eventManager->trigger(self::EVENT_CHECK_PERMISSIONS_EDIT, $item);
 
-        $formManager = $this->getFormManager();
+        /** @var FormBuilder $formBuilder */
+        $formBuilder = $gridManager->getFormBuilder();
 
         /** @var Form $form */
-        $form = $formManager->build($grid, FormBuilder::FORM_CONTEXT_EDIT, $item);
+        $form = $formBuilder->build($grid, FormBuilder::FORM_CONTEXT_EDIT, $item);
 
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
@@ -214,8 +204,8 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             'title'        => static::TITLE_ACTION_EDIT,
             'item'         => $item,
             'form'         => $form,
-            'customJs'     => $formManager->getCustomJs(),
-            'formSections' => $this->getFormManager()->getFormSections(),
+            'customJs'     => $formBuilder->getCustomJs(),
+            'formSections' => $formBuilder->getFormSections(),
             'backUrl'      => $this->backTo()->getBackUrl(false),
         ]);
 
@@ -267,5 +257,4 @@ abstract class AbstractAdminGridController extends AbstractAdminController
 
     abstract public function getGrid();
     abstract public function getGridManager();
-    abstract public function getFormManager();
 }
