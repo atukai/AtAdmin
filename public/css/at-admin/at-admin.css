@@ -9,7 +9,7 @@ footer {
 }
 
 .page-header {
-    margin: 20px 0 30px;
+    margin: 30px 0;
 }
 
 .navbar-brand {
@@ -46,6 +46,10 @@ label span.required {
     color: #e51c23;
     position: absolute;
     right: 4px;
+}
+
+#notification {
+    margin-top: 40px;
 }
 
 /* Misc */
