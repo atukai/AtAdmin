@@ -59,7 +59,11 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         }
 
         $grid = $this->getGrid();
-        $grid->setOrder($this->request->getQuery('order', $grid->getIdentifierColumnName().'~desc'));
+
+        if ($this->request->getQuery('order')) {
+            $order = explode('~', $this->request->getQuery('order'));
+            $grid->setOrder([$order[0] => $order[1]]);
+        }
 
         if ($this->request->getQuery('page')) {
             $grid->setCurrentPage($this->request->getQuery('page'));
