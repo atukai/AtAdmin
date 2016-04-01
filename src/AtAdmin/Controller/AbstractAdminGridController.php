@@ -19,6 +19,8 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     const EVENT_CHECK_PERMISSIONS_EDIT   = 'at-admin.check-permissions.edit';
     const EVENT_CHECK_PERMISSIONS_DELETE = 'at-admin.check-permissions.delete';
 
+    const EVENT_VALIDATION_EDIT_PRE      = 'at-admin.validation.edit.pre';
+
     const EVENT_SAVE_PRE                 = 'at-admin.save.pre';
     const EVENT_SAVE_POST                = 'at-admin.save.post';
     const EVENT_DELETE_PRE               = 'at-admin.delete.pre';
@@ -171,6 +173,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         }
 
         $item = $grid->getRow($id);
+
         if (!$item) {
             return $this->notFoundAction();
         }
@@ -189,9 +192,11 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             $post = $this->getRequest()->getPost();
             $form->setData($post);
 
+            $this->getEventManager()->trigger(self::EVENT_VALIDATION_EDIT_PRE, $form, ['oldData' => $item, 'newData' => $post]);
+
             if ($form->isValid()) {
                 // Replace POST data with filtered and validated form values
-                // POST data may contains not only form data
+                // POST data may contains not only form data (extra data from sections)
                 $data = array_replace($post->toArray(), $form->getData());
 
                 $eventManager->trigger(self::EVENT_SAVE_PRE, $item, $data);
