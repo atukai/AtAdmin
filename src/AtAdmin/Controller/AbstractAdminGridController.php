@@ -5,7 +5,6 @@ namespace AtAdmin\Controller;
 use AtDataGrid\DataGrid;
 use AtDataGrid\Form\FormBuilder;
 use AtDataGrid\Manager as GridManager;
-use AtDataGrid\Manager;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Stdlib\ArrayUtils;
@@ -36,11 +35,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     const TITLE_ACTION_DELETE            = 'Delete';
 
     /**
-     * @var DataGrid
-     */
-    protected $grid;
-
-    /**
      * @var GridManager
      */
     protected $gridManager;
@@ -60,7 +54,8 @@ abstract class AbstractAdminGridController extends AbstractAdminController
             $this->forward($_POST['cmd']);    // @todo refactor this
         }
 
-        $grid = $this->getGrid();
+        $gridManager = $this->getGridManager();
+        $grid = $gridManager->getGrid();
 
         if ($this->request->getQuery('order')) {
             $order = explode('~', $this->request->getQuery('order'));
@@ -74,8 +69,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         if ($this->request->getQuery('show_items')) {
             $grid->setItemsPerPage($this->request->getQuery('show_items'));
         }
-
-        $gridManager = $this->getGridManager();
 
         $filtersForm = $gridManager->getFiltersForm();
         $filtersForm->setData($this->request->getQuery());
@@ -101,7 +94,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
 
         /** @var GridManager $gridManager */
         $gridManager = $this->getGridManager();
-
         if (! $gridManager->isAllowCreate()) {
             throw new \Exception('Creating is disabled');
         }
@@ -173,7 +165,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         }
 
         $item = $grid->getRow($id);
-
         if (!$item) {
             return $this->notFoundAction();
         }
@@ -264,6 +255,23 @@ abstract class AbstractAdminGridController extends AbstractAdminController
         $this->backTo()->previous('Record deleted.');
     }
 
-    abstract public function getGrid();
-    abstract public function getGridManager();
+    /**
+     * @param GridManager $manager
+     */
+    public function setGridManager(GridManager $manager)
+    {
+        $this->gridManager = $manager;
+    }
+
+    /**
+     * @return Manager
+     */
+    public function getGridManager()
+    {
+        if (!$this->gridManager) {
+            throw new \RuntimeException('GridManager is not set');
+        }
+
+        return $this->gridManager;
+    }
 }
