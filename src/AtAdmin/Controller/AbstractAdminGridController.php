@@ -29,6 +29,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     const EVENT_SET_TEMPLATE_EDIT        = 'at-admin.set-template.edit';
 
     // Page titles
+    // @todo Remove 
     const TITLE_ACTION_LIST              = '';
     const TITLE_ACTION_CREATE            = 'Create';
     const TITLE_ACTION_EDIT              = 'Edit';
