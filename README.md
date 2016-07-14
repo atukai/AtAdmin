@@ -1,6 +1,6 @@
 # AtAdmin [1.0.0-dev]
 
-The missing ZF2 Admin module constructor.
+The missing ZF2(3) аdmin panel constructor.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atukai/AtAdmin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atukai/AtAdmin/?branch=master)
 
