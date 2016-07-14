@@ -2,8 +2,10 @@
 
 namespace AtAdmin;
 
+use AtAdmin\Controller\DashboardController;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 class Module
 {
@@ -18,9 +20,8 @@ class Module
     public function getControllerConfig()
     {
         return [
-            'invokables' => [
-                'AtAdmin\Controller\Dashboard'              => 'AtAdmin\Controller\DashboardController',
-                'AtAdmin\Controller\AbstractCrudController' => 'AtDataGrid\Controller\AbstractCrudController'
+            'factories' => [
+                DashboardController::class => InvokableFactory::class,
             ],
         ];
     }

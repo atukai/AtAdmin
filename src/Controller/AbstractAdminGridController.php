@@ -7,7 +7,6 @@ use AtDataGrid\Form\FormBuilder;
 use AtDataGrid\Manager as GridManager;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
-use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
 
 abstract class AbstractAdminGridController extends AbstractAdminController
