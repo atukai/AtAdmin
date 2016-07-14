@@ -1,10 +1,8 @@
 {
     "name": "atukai/at-admin",
-    "description": "The missing ZF2 Admin module constructor",
+    "description": "The missing ZF2(3) admin panel constructor",
     "type": "library",
-    "keywords": [
-        "admin", "administration", "manage", "AtAdmin", "atukai", "at", "zf2"
-    ],
+    "keywords": ["admin", "administration", "manage"],
     "homepage": "https://github.com/atukai/AtAdmin",
     "authors": [
         {
@@ -23,11 +21,8 @@
         "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "AtAdmin\\": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+        }
     }
 }
