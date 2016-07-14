@@ -8,7 +8,7 @@ return [
                 'options' => [
                     'route'    => '/admin',
                     'defaults' => [
-                        'controller' => 'AtAdmin\Controller\Dashboard',
+                        'controller' => \AtAdmin\Controller\DashboardController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -43,6 +43,5 @@ return [
 
     'at-admin' => [
         'admin_layout' => 'layout/admin',
-        'logout_route' => ''
     ]
 ];
