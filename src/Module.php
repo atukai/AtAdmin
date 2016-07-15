@@ -45,7 +45,7 @@ class Module
                 return;
             }
 
-            $layout = $config['at-admin']['admin_layout'];
+            $layout = $config['at-admin']['layout'];
             $controller->layout($layout);
         });
     }

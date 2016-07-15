@@ -42,6 +42,6 @@ return [
     ],
 
     'at-admin' => [
-        'admin_layout' => 'layout/admin',
+        'layout' => 'layout/admin',
     ]
 ];
