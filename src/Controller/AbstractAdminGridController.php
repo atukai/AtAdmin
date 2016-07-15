@@ -42,7 +42,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     /**
      * @return mixed
      */
-    public function listAction()
+    public function getAction()
     {
         $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_LIST, $this);
 
