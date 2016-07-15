@@ -12,8 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "zendframework/zend-mvc": "^2.5 || ^3.0.1",
+        "php": ">=5.6",
+        "zendframework/zend-mvc": "^2.6 || ^3.0.1",
         "atukai/at-base": "dev-master",
         "atukai/at-datagrid": "dev-master"
     },
