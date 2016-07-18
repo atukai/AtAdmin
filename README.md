@@ -1,4 +1,4 @@
-# AtAdmin [1.0.0]
+# AtAdmin
 
 The missing ZF2(3) аdmin panel constructor.
 
@@ -19,7 +19,7 @@ The missing ZF2(3) аdmin panel constructor.
 
 ## Installation
 
- 1. Add `"atukai/at-admin": "~1.0.0"` to your `composer.json` file and run `php composer.phar update`.
+ 1. Add `"atukai/at-admin": "~1.1.0"` to your `composer.json` file and run `php composer.phar update`.
  2. Add `AtAdmin` to your `config/application.config.php` file under the `modules` key.
  3. Copy or create a symlink of public/css, public/js and public/images to your website root directory
 
