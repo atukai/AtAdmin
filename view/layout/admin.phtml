@@ -1,12 +1,11 @@
-<?php echo $this->doctype(); ?>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?php echo $this->headMeta() ?>
         <?php echo $this->headTitle('AtAdmin Admin Panel')->setSeparator(' | ')->setAutoEscape(false) ?>
-
-        <?php echo $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
 
         <!-- Styles -->
         <?php echo $this->headLink()

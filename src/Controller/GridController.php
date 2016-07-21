@@ -5,6 +5,7 @@ namespace AtAdmin\Controller;
 use AtDataGrid\DataGrid;
 use AtDataGrid\Form\FormBuilder;
 use AtDataGrid\Manager as GridManager;
+use AtDataGrid\Manager;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
@@ -143,7 +144,7 @@ class GridController extends AbstractAdminController
     }
 
     /**
-     * @return ViewModel
+     * @return array|mixed|ViewModel
      * @throws \Exception
      */
     public function editAction()
@@ -217,6 +218,7 @@ class GridController extends AbstractAdminController
     }
 
     /**
+     * @return array
      * @throws \Exception
      */
     public function deleteAction()
@@ -254,7 +256,7 @@ class GridController extends AbstractAdminController
     }
 
     /**
-     * @param GridManager $manager
+     * @param Manager $manager
      */
     public function setGridManager(GridManager $manager)
     {
@@ -262,7 +264,7 @@ class GridController extends AbstractAdminController
     }
 
     /**
-     * @return GridManager
+     * @return Manager
      */
     public function getGridManager()
     {
