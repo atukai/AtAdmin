@@ -13,12 +13,9 @@
     ],
     "require": {
         "php": ">=5.6",
-        "zendframework/zend-mvc": "~2.7",
+        "zendframework/zend-mvc": "^2.7 || ^3.0",
         "atukai/at-base": "dev-master",
         "atukai/at-datagrid": "dev-master"
-    },
-    "suggest": {
-        "zf-commons/zfc-rbac": "For protection of your admin pages with RBAC"
     },
     "autoload": {
         "psr-4": {

@@ -6,7 +6,7 @@ The missing ZF2(3) аdmin panel constructor.
 
 ## Requirements
 
-* [Zend Framework 2](https://github.com/zendframework/zf2)
+* [Zend MVC](https://github.com/zendframework/zend-mvc)
 * [AtBase](https://github.com/atukai/AtBase)
 * [AtDataGrid](https://github.com/atukai/AtDataGrid)
 * [Bootstrap](http://getbootstrap.com/)
@@ -19,7 +19,7 @@ The missing ZF2(3) аdmin panel constructor.
 
 ## Installation
 
- 1. Add `"atukai/at-admin": "~1.1.0"` to your `composer.json` file and run `php composer.phar update`.
+ 1. Run `composer require atukai/at-admin`.
  2. Add `AtAdmin` to your `config/application.config.php` file under the `modules` key.
  3. Copy or create a symlink of public/css, public/js and public/images to your website root directory
 

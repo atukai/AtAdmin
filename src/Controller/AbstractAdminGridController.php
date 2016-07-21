@@ -40,6 +40,15 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     protected $gridManager;
 
     /**
+     * AbstractAdminGridController constructor.
+     * @param GridManager $gridManager
+     */
+    public function __construct(GridManager $gridManager)
+    {
+        $this->gridManager = $gridManager;
+    }
+
+    /**
      * @return mixed
      */
     public function getAction()
@@ -256,22 +265,10 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     }
 
     /**
-     * @param GridManager $manager
-     */
-    public function setGridManager(GridManager $manager)
-    {
-        $this->gridManager = $manager;
-    }
-
-    /**
-     * @return Manager
+     * @return GridManager
      */
     public function getGridManager()
     {
-        if (!$this->gridManager) {
-            throw new \RuntimeException('GridManager is not set');
-        }
-
         return $this->gridManager;
     }
 }

@@ -32,21 +32,21 @@ class Module
     public function onBootstrap(MvcEvent $e)
     {
         $app = $e->getApplication();
-        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function (MvcEvent $e) {
-            $app    = $e->getApplication();
+        $app->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function (MvcEvent $e) use ($app) {
             $config = $app->getServiceManager()->get('config');
 
-            $match      = $e->getRouteMatch();
+            $routeMatch = $e->getRouteMatch();
             $controller = $e->getTarget();
-            if (!$match instanceof RouteMatch
-                || 0 !== strpos($match->getMatchedRouteName(), 'at-admin')
+            if (!$routeMatch instanceof RouteMatch
+                || 0 !== strpos($routeMatch->getMatchedRouteName(), 'at-admin')
                 || $controller->getEvent()->getResult()->terminate()
             ) {
                 return;
             }
 
-            $layout = $config['at-admin']['layout'];
-            $controller->layout($layout);
+            if (isset($config['at-admin']['layout'])) {
+                $controller->layout($config['at-admin']['layout']);
+            }
         });
     }
 }
