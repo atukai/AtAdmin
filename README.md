@@ -7,7 +7,6 @@ The missing ZF2(3) аdmin panel constructor.
 ## Requirements
 
 * [Zend MVC](https://github.com/zendframework/zend-mvc)
-* [AtBase](https://github.com/atukai/AtBase)
 * [AtDataGrid](https://github.com/atukai/AtDataGrid)
 * [Bootstrap](http://getbootstrap.com/)
 

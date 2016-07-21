@@ -3,6 +3,7 @@
 namespace AtAdmin;
 
 use AtAdmin\Controller\DashboardController;
+use AtAdmin\Controller\Plugin\BackTo;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -25,6 +26,19 @@ class Module
             ],
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getControllerPluginConfig()
+    {
+        return [
+            'invokables' => [
+                'backTo' => BackTo::class
+            ],
+        ];
+    }
+
 
     /**
      * @param MvcEvent $e
