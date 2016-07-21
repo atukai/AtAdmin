@@ -9,7 +9,7 @@ use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 
-abstract class AbstractAdminGridController extends AbstractAdminController
+class GridController extends AbstractAdminController
 {
     // Events
     const EVENT_CHECK_PERMISSIONS_LIST   = 'at-admin.check-permissions.list';
@@ -38,15 +38,6 @@ abstract class AbstractAdminGridController extends AbstractAdminController
      * @var GridManager
      */
     protected $gridManager;
-
-    /**
-     * AbstractAdminGridController constructor.
-     * @param GridManager $gridManager
-     */
-    public function __construct(GridManager $gridManager)
-    {
-        $this->gridManager = $gridManager;
-    }
 
     /**
      * @return mixed
@@ -98,8 +89,7 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     {
         /** @var EventManager $eventManager */
         $eventManager = $this->getEventManager();
-
-        $this->getEventManager()->trigger(self::EVENT_CHECK_PERMISSIONS_CREATE, $this);
+        $eventManager->trigger(self::EVENT_CHECK_PERMISSIONS_CREATE, $this);
 
         /** @var GridManager $gridManager */
         $gridManager = $this->getGridManager();
@@ -160,13 +150,12 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     {
         /** @var Manager $gridManager */
         $gridManager = $this->getGridManager();
-
-        /** @var DataGrid $grid */
-        $grid = $gridManager->getGrid();
-
         if (!$gridManager->isAllowEdit()) {
             throw new \Exception('Editing is disabled');
         }
+
+        /** @var DataGrid $grid */
+        $grid = $gridManager->getGrid();
 
         $id = $this->params($grid->getIdentifierColumnName());
         if (!$id) {
@@ -265,10 +254,22 @@ abstract class AbstractAdminGridController extends AbstractAdminController
     }
 
     /**
+     * @param GridManager $manager
+     */
+    public function setGridManager(GridManager $manager)
+    {
+        $this->gridManager = $manager;
+    }
+
+    /**
      * @return GridManager
      */
     public function getGridManager()
     {
+        if (!$this->gridManager) {
+            throw new \RuntimeException('Grid manager was not set');
+        }
+
         return $this->gridManager;
     }
 }
